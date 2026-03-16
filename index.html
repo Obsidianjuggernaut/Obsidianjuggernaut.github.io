@@ -130,6 +130,37 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);lin
 .team,.ondeck,.foot{opacity:0;animation:fadeUp .4s ease-out forwards}
 .team:nth-child(1){animation-delay:.1s}.team:nth-child(2){animation-delay:.15s}.team:nth-child(3){animation-delay:.2s}.team:nth-child(4){animation-delay:.25s}.team:nth-child(5){animation-delay:.3s}.team:nth-child(6){animation-delay:.35s}.team:nth-child(7){animation-delay:.4s}.team:nth-child(8){animation-delay:.45s}
 .ondeck{animation-delay:.5s}.foot{animation-delay:.55s}
+
+.readme{max-width:780px;margin:2rem auto;padding:0 1rem 6rem}
+.readme-inner{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.readme-hdr{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;cursor:pointer;user-select:none;border-bottom:1px solid var(--border-s);background:linear-gradient(135deg,var(--purple-deep),var(--purple-dark))}
+.readme-hdr:hover{background:linear-gradient(135deg,var(--purple-dark),var(--purple))}
+.readme-hdr h2{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.15rem;color:var(--gold)}
+.readme-toggle{color:var(--gold);font-size:.8rem;transition:transform .3s}
+.readme-toggle.open{transform:rotate(180deg)}
+.readme-body{padding:1.5rem 1.5rem 2rem;display:none}
+.readme-body.open{display:block}
+.readme-body h3{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.1rem;color:var(--text);margin:1.5rem 0 .5rem;padding-bottom:.3rem;border-bottom:1px solid var(--border-s)}
+.readme-body h3:first-of-type{margin-top:0}
+.readme-body h4{font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;color:var(--purple-light);margin:1rem 0 .4rem}
+.readme-body p{font-size:.82rem;color:var(--text-mid);line-height:1.6;margin-bottom:.6rem}
+.readme-lead{font-size:.88rem!important;color:var(--text)!important;line-height:1.7!important}
+.readme-body ul,.readme-body ol{padding-left:1.4rem;margin-bottom:.8rem}
+.readme-body li{font-size:.82rem;color:var(--text-mid);line-height:1.6;margin-bottom:.25rem}
+.readme-body li ul{margin-top:.25rem;margin-bottom:.25rem}
+.readme-body strong{color:var(--text)}
+.readme-body a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(212,168,67,.25)}
+.readme-body a:hover{color:var(--gold-bright);border-bottom-color:var(--gold-bright)}
+.readme-body code{font-size:.78rem;background:var(--purple-wash);color:var(--purple-light);padding:.12rem .4rem;border-radius:4px;font-family:'SF Mono',Monaco,Consolas,monospace}
+.readme-body pre{background:var(--bg);border:1px solid var(--border-s);border-radius:10px;padding:.85rem 1rem;font-size:.74rem;color:var(--text-mid);overflow-x:auto;margin:.6rem 0 1rem;line-height:1.5;font-family:'SF Mono',Monaco,Consolas,monospace;white-space:pre}
+.readme-diagram{font-size:.68rem!important;line-height:1.4!important}
+.readme-body hr{border:none;border-top:1px solid var(--border-s);margin:1.5rem 0}
+.readme-table-wrap{overflow-x:auto;margin:.6rem 0 1rem}
+.readme-body table{width:100%;border-collapse:collapse;font-size:.78rem}
+.readme-body th{text-align:left;padding:.45rem .6rem;background:var(--purple-wash);color:var(--purple-light);font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
+.readme-body td{padding:.4rem .6rem;color:var(--text-mid);border-bottom:1px solid var(--border-s)}
+.readme-body tr:hover td{background:var(--purple-faint)}
+@media print{.readme{display:none!important}}
 </style>
 </head>
 <body>
@@ -173,6 +204,270 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);lin
   </div></div>
 </div>
 <div class="toast" id="toast"></div>
+
+<section class="readme" id="readme">
+  <div class="readme-inner">
+    <div class="readme-hdr" onclick="toggleReadme()">
+      <h2>✟ About This Dashboard</h2>
+      <span class="readme-toggle" id="readmeToggle">▼</span>
+    </div>
+    <div class="readme-body" id="readmeBody">
+
+      <p class="readme-lead">A mobile-first, shareable web dashboard for managing monthly communion delivery assignments at <strong>New Salem Baptist Church</strong> (Columbus, Ohio). Upload an Excel spreadsheet or photo of the communion list — the dashboard automatically parses, groups by deacon team, and generates a live page with Google Maps navigation and tap-to-call links that can be shared with any deacon via a single URL.</p>
+
+      <hr>
+
+      <h3>The Problem</h3>
+      <p>Every month, church administrators create an Excel spreadsheet listing homebound members who need communion delivered. Deacon teams are assigned visits, but distributing the list means printing paper copies or emailing a spreadsheet that's hard to use on a phone — especially when a deacon is driving between stops and needs quick access to an address, phone number, or navigation directions.</p>
+
+      <h3>The Solution</h3>
+      <p><strong>One HTML file. No server. No app install. No accounts.</strong></p>
+      <ol>
+        <li>Open the dashboard in any browser</li>
+        <li>Upload the monthly Excel spreadsheet (or a screenshot of it)</li>
+        <li>The dashboard renders instantly — grouped by deacon team with full details</li>
+        <li>Share the URL — it contains the entire dataset encoded in the link</li>
+        <li>Deacons open the link on their phones and get:
+          <ul>
+            <li><strong>Tap-to-Navigate</strong> → opens Google Maps with turn-by-turn directions</li>
+            <li><strong>Tap-to-Call</strong> → dials the member or point of contact directly</li>
+            <li><strong>Team filtering</strong> → sticky nav bar to jump to their specific assignment</li>
+            <li><strong>Print-ready</strong> layout for those who still want paper</li>
+          </ul>
+        </li>
+      </ol>
+
+      <hr>
+
+      <h3>Features</h3>
+
+      <h4>📊 Smart Excel Parsing</h4>
+      <ul>
+        <li>Auto-detects header row and maps columns by name (First Name, Last Name, Address, City, State, Zip, Phone, POC, Deacon Team, Notes)</li>
+        <li>Handles merged cells, multi-line cell content, semicolon-delimited addresses, and facility names</li>
+        <li>Parses the "Deacon Teams On Deck" and "Unavailable" sections at the bottom of the spreadsheet</li>
+        <li>Extracts the service date from the spreadsheet header automatically</li>
+        <li>Auto-corrects known spelling issues (e.g., "Marshell" → "Marshall")</li>
+      </ul>
+
+      <h4>📸 Image Upload (OCR)</h4>
+      <ul>
+        <li>Upload a photo or screenshot of the spreadsheet instead of the Excel file</li>
+        <li>Uses <a href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener">Tesseract.js</a> for in-browser OCR</li>
+        <li>Best-effort parsing — Excel upload is recommended for full accuracy</li>
+      </ul>
+
+      <h4>🔗 Shareable Links (No Server Required)</h4>
+      <ul>
+        <li>After upload, the browser URL updates with a <code>#data=</code> hash containing the full dataset (base64-encoded JSON)</li>
+        <li>Anyone who opens that URL sees the complete dashboard — <strong>no upload needed on their end</strong></li>
+        <li>Works via text message, email, AirDrop, or any link-sharing method</li>
+        <li>Typical payload is ~5KB — well within URL limits for all modern browsers and messaging apps</li>
+      </ul>
+
+      <h4>📱 Mobile-First Design</h4>
+      <ul>
+        <li>Responsive card layout optimized for phone screens</li>
+        <li><strong>Tap-to-Call</strong> buttons for every phone number (member, facility, point of contact)</li>
+        <li><strong>Navigate</strong> buttons that open Google Maps with the full address</li>
+        <li>Sticky team navigation bar for quick access</li>
+        <li>Fixed bottom action bar on mobile (Share, Print, Upload New)</li>
+        <li>Native share sheet integration on iOS/Android</li>
+        <li>Safe area support for notched devices</li>
+      </ul>
+
+      <h4>🖨️ Print-Ready</h4>
+      <ul>
+        <li>Clean print stylesheet hides all interactive elements</li>
+        <li>Cards avoid page breaks</li>
+        <li>Works with any browser's print dialog or "Save as PDF"</li>
+      </ul>
+
+      <h4>✟ Church-Branded Theme</h4>
+      <ul>
+        <li>Royal purple and gold color scheme inspired by <a href="https://newsalemcares.com" target="_blank" rel="noopener">newsalemcares.com</a></li>
+        <li>Gold Christian cross with radial glow in the header</li>
+        <li>Cormorant Garamond serif headings with DM Sans body text</li>
+        <li>Subtle cross-pattern texture overlay</li>
+        <li>Entrance animations for a polished experience</li>
+      </ul>
+
+      <hr>
+
+      <h3>Getting Started</h3>
+
+      <h4>Quick Start (Local)</h4>
+      <ol>
+        <li>Download <code>NSBC_Communion_Delivery.html</code></li>
+        <li>Open it in any modern browser (Chrome, Safari, Firefox, Edge)</li>
+        <li>Upload your Excel spreadsheet (<code>.xlsx</code>, <code>.xls</code>, or <code>.csv</code>)</li>
+        <li>Done — the dashboard renders with all data</li>
+      </ol>
+
+      <h4>Hosting for Shareable Links</h4>
+      <p>For the shareable URL feature to work, the HTML file needs to be hosted at an accessible URL. Options:</p>
+      <div class="readme-table-wrap">
+        <table>
+          <thead><tr><th>Host</th><th>Cost</th><th>Setup Time</th><th>URL Format</th></tr></thead>
+          <tbody>
+            <tr><td><strong>GitHub Pages</strong></td><td>Free</td><td>5 min</td><td><code>username.github.io</code></td></tr>
+            <tr><td><strong>Netlify Drop</strong></td><td>Free</td><td>30 sec</td><td><code>random-name.netlify.app</code></td></tr>
+            <tr><td><strong>Tiiny.host</strong></td><td>Free</td><td>30 sec</td><td><code>your-name.tiiny.site</code></td></tr>
+            <tr><td><strong>Church website</strong></td><td>—</td><td>Varies</td><td><code>newsalemcares.com/communion/</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr>
+
+      <h3>Spreadsheet Format</h3>
+      <p>The dashboard expects an Excel spreadsheet with this structure:</p>
+
+      <h4>Header Rows (Rows 1–4)</h4>
+      <pre>Row 1: New Salem Baptist Church - Communion Delivery
+Row 2: 2956 Cleveland Avenue
+Row 3: Columbus, Ohio 43224
+Row 4: Sunday, March 1, 2026    ← service date (auto-detected)</pre>
+
+      <h4>Column Headers (Row 5)</h4>
+      <div class="readme-table-wrap">
+        <table>
+          <thead><tr><th>Column</th><th>Header</th><th>Required</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>First Name</td><td>✅</td></tr>
+            <tr><td>B</td><td>Last Name</td><td>✅</td></tr>
+            <tr><td>C</td><td>Address</td><td>✅</td></tr>
+            <tr><td>D</td><td>City</td><td>✅</td></tr>
+            <tr><td>E</td><td>State</td><td>✅</td></tr>
+            <tr><td>F</td><td>Zip</td><td>✅</td></tr>
+            <tr><td>G</td><td>Phone Number</td><td>Recommended</td></tr>
+            <tr><td>H</td><td>POC First Name</td><td>Optional</td></tr>
+            <tr><td>I</td><td>POC Last Name</td><td>Optional</td></tr>
+            <tr><td>J</td><td>POC Phone</td><td>Optional</td></tr>
+            <tr><td>K</td><td>POC Email</td><td>Optional</td></tr>
+            <tr><td>L</td><td>Deacon(s) Team Assigned</td><td>✅</td></tr>
+            <tr><td>M</td><td>Notes</td><td>Optional</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>On Deck / Unavailable Section (After data rows)</h4>
+      <pre>Row N:   Deacon Teams On Deck
+Row N+1: [team names]
+Row N+2: Unavailable
+Row N+3: A. Hill
+Row N+4: D. Cade</pre>
+
+      <hr>
+
+      <h3>How Sharing Works</h3>
+      <pre class="readme-diagram">┌─────────────────────────────────────────────────────┐
+│  ADMINISTRATOR                                       │
+│                                                       │
+│  1. Opens hosted dashboard URL                        │
+│  2. Uploads monthly Excel spreadsheet                 │
+│  3. Dashboard renders with all data                   │
+│  4. URL auto-updates with encoded data               │
+│  5. Clicks "Share Dashboard" button                   │
+│                                                       │
+│         ┌──────────────────────────┐                  │
+│         │  📱 Native Share Sheet   │                  │
+│         │  • Text Message          │                  │
+│         │  • Email                 │                  │
+│         │  • AirDrop               │                  │
+│         │  • Copy Link             │                  │
+│         └──────────────────────────┘                  │
+│                      │                                │
+└──────────────────────┼────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────┐
+│  DEACONS (on their phones)                           │
+│                                                       │
+│  1. Tap the shared link                               │
+│  2. Dashboard loads instantly (data is in the URL)    │
+│  3. Find their team in the sticky nav bar             │
+│  4. Tap "Navigate" → Google Maps directions           │
+│  5. Tap phone number → calls the member               │
+│                                                       │
+│  No upload needed. No app needed. No account needed.  │
+└─────────────────────────────────────────────────────┘</pre>
+
+      <hr>
+
+      <h3>Technology</h3>
+      <p>This is a <strong>single HTML file</strong> with zero build steps and zero server dependencies.</p>
+      <div class="readme-table-wrap">
+        <table>
+          <thead><tr><th>Component</th><th>Technology</th></tr></thead>
+          <tbody>
+            <tr><td>UI Framework</td><td>Vanilla HTML/CSS/JS</td></tr>
+            <tr><td>Excel Parsing</td><td><a href="https://sheetjs.com/" target="_blank" rel="noopener">SheetJS (xlsx)</a> via CDN</td></tr>
+            <tr><td>Image OCR</td><td><a href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener">Tesseract.js v5</a> via CDN</td></tr>
+            <tr><td>Fonts</td><td>Google Fonts (Cormorant Garamond + DM Sans)</td></tr>
+            <tr><td>Maps</td><td>Google Maps Search URLs</td></tr>
+            <tr><td>Phone Links</td><td><code>tel:</code> URI scheme</td></tr>
+            <tr><td>Data Sharing</td><td>Base64-encoded JSON in URL hash fragment</td></tr>
+            <tr><td>Hosting</td><td>Any static file host (or local file)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>No npm. No build. No backend. No database. No API keys.</strong></p>
+
+      <hr>
+
+      <h3>Browser Support</h3>
+      <div class="readme-table-wrap">
+        <table>
+          <thead><tr><th>Browser</th><th>Desktop</th><th>Mobile</th></tr></thead>
+          <tbody>
+            <tr><td>Chrome</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Safari</td><td>✅</td><td>✅ (iOS)</td></tr>
+            <tr><td>Firefox</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Edge</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Samsung Internet</td><td>—</td><td>✅</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr>
+
+      <h3>Customization</h3>
+
+      <h4>Changing the Church Name / Address</h4>
+      <p>Edit the HTML header section — search for "New Salem Baptist Church" and update the text and contact info.</p>
+
+      <h4>Changing the Color Theme</h4>
+      <p>All colors are defined as CSS variables at the top of the <code>&lt;style&gt;</code> block:</p>
+      <pre>:root {
+  --purple-deep: #2a1648;    /* Darkest background */
+  --purple-dark: #3b2060;    /* Card backgrounds */
+  --purple: #4e2d78;         /* Accent elements */
+  --purple-mid: #6a3f9e;     /* Hover states */
+  --gold: #d4a843;           /* Primary accent */
+  --gold-bright: #ebc95e;    /* Hover accent */
+  --bg: #160e24;             /* Page background */
+  --bg-card: #231840;        /* Card background */
+}</pre>
+
+      <h4>Adding New Column Mappings</h4>
+      <p>The <code>mapColumns()</code> function in the JavaScript section handles header-to-field mapping. Add new patterns to support additional column headers from different spreadsheet formats.</p>
+
+      <hr>
+
+      <h3>Project Background</h3>
+      <p>This project was built to solve a real operational need at New Salem Baptist Church in Columbus, Ohio. The church's deacon ministry coordinates monthly communion delivery to homebound members across the Columbus metro area. The previous workflow involved printing Excel spreadsheets — this dashboard digitizes the process while keeping it simple enough for anyone to use.</p>
+      <p>Built with <a href="https://claude.ai" target="_blank" rel="noopener">Claude AI</a> by Anthropic.</p>
+
+      <hr>
+
+      <h3>License</h3>
+      <p>MIT License — free to use, modify, and distribute. Built for the glory of God and the service of His people.</p>
+      <p>If your church would benefit from a similar tool, feel free to fork and customize.</p>
+
+    </div>
+  </div>
+</section>
 
 <script>
 const PIN=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
@@ -458,6 +753,13 @@ function exportJSON(){
 }
 
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+function toggleReadme(){
+  const body=document.getElementById('readmeBody');
+  const toggle=document.getElementById('readmeToggle');
+  body.classList.toggle('open');
+  toggle.classList.toggle('open');
+}
 
 // Load from ?list=ID (short link) or #data= (legacy inline link)
 (function(){
