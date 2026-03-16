@@ -1,0 +1,142 @@
+{
+  "members": [
+    {
+      "firstName": "Martha",
+      "lastName": "Pack",
+      "fullAddress": "Woodlands of Columbus, 5380 E. Broad St., Rm # 313, Columbus, OH 43224",
+      "phone": "614-569-2586",
+      "pocFirst": "Carolyn",
+      "pocLast": "Green",
+      "pocPhone": "614-501-2997",
+      "pocEmail": "N/A",
+      "deaconTeam": "Scott and Taylor",
+      "notes": "Call ahead of time"
+    },
+    {
+      "firstName": "Cornelius",
+      "lastName": "Tucker",
+      "fullAddress": "Mother Angeline McCrory Manor \"The Villas\" Assisted Living Facility, 5253 E. Broad Street, Columbus, OH 43213",
+      "phone": "Cell #\r\n614-632-0664\r\n\r\nFacility #\r\n614-856-9951",
+      "pocFirst": "",
+      "pocLast": "",
+      "pocPhone": "Cell #\r\n614-632-0664\r\n\r\nFacility #\r\n614-856-9951",
+      "pocEmail": "",
+      "deaconTeam": "Scott and Taylor",
+      "notes": "Call ahead"
+    },
+    {
+      "firstName": "Richard",
+      "lastName": "Harris",
+      "fullAddress": "1430 S. High Street --2nd Floor, Observation Room 14., Columbus, OH 43207",
+      "phone": "614-216-8742",
+      "pocFirst": "Joyce",
+      "pocLast": "Harris",
+      "pocPhone": "614-216-8742",
+      "pocEmail": "",
+      "deaconTeam": "Brown and Marshall",
+      "notes": "Call his wife"
+    },
+    {
+      "firstName": "Margo",
+      "lastName": "Rhodes",
+      "fullAddress": "Bickford of Bexley, 2600 E Main St., Apt # 208, Bexley, OH 43209",
+      "phone": "614-327-1542",
+      "pocFirst": "Margo",
+      "pocLast": "Rhodes",
+      "pocPhone": "614-327-1542",
+      "pocEmail": "N/A",
+      "deaconTeam": "Harrison and E.Hill",
+      "notes": "Call ahead (To be served after 1:00PM-Lunch)"
+    },
+    {
+      "firstName": "Joyce",
+      "lastName": "Moody",
+      "fullAddress": "McNaughton Point\r, 1425 Yorkland RD, Columbus, OH 43232",
+      "phone": "614-751-2525",
+      "pocFirst": "",
+      "pocLast": "",
+      "pocPhone": "Nursing Home#\r\n614-751-2525",
+      "pocEmail": "N/A",
+      "deaconTeam": "Nelson and Robinson",
+      "notes": "Call ahead"
+    },
+    {
+      "firstName": "Richard",
+      "lastName": "Harris",
+      "fullAddress": "OSU East  - Room 513\r, (Re-addmitted to hospital), Columbus, OH",
+      "phone": "Please call his wife Mrs. Joyce Wright Harris (614) 216-8742 or (614) 214-1516",
+      "pocFirst": "",
+      "pocLast": "",
+      "pocPhone": "",
+      "pocEmail": "",
+      "deaconTeam": "A.Hill and Marshall",
+      "notes": "Call ahead"
+    },
+    {
+      "firstName": "Gregg",
+      "lastName": "White",
+      "fullAddress": "Capital City Garden, 920 Thurber Drive W - Room B16, Columbus, OH 43201",
+      "phone": "614-519-1291",
+      "pocFirst": "",
+      "pocLast": "",
+      "pocPhone": "614-519-1291",
+      "pocEmail": "",
+      "deaconTeam": "Fortson and Granger",
+      "notes": "Call ahead"
+    },
+    {
+      "firstName": "Richardson",
+      "lastName": "Walter & Essie",
+      "fullAddress": "6241 Kinver Edge Way (Home), Columbus, OH 43213",
+      "phone": "Home #\r\n614-755-4936\r\n\r\nCell #\r\n614-530-5130",
+      "pocFirst": "Walter",
+      "pocLast": "",
+      "pocPhone": "",
+      "pocEmail": "",
+      "deaconTeam": "Brewton and Arnold",
+      "notes": "Call ahead"
+    },
+    {
+      "firstName": "William",
+      "lastName": "Leigh",
+      "fullAddress": "Mount Carmel Hospital, East, 6001 E. Broad Street Room-3M17, Columbus, OH 43213",
+      "phone": "Hospital: 614- 234-6000",
+      "pocFirst": "Alice",
+      "pocLast": "Leigh",
+      "pocPhone": "614-570-3681",
+      "pocEmail": "",
+      "deaconTeam": "Scott and Taylor",
+      "notes": "call his wife"
+    },
+    {
+      "firstName": "Raymond",
+      "lastName": "Miller",
+      "fullAddress": "West Park Care Center, 1700 Heinzerling Drive, Columbus, OH 43223",
+      "phone": "220-262-3591",
+      "pocFirst": "Receptionist",
+      "pocLast": "",
+      "pocPhone": "614-274-4222",
+      "pocEmail": "",
+      "deaconTeam": "Fortson and Granger",
+      "notes": "Call Ahead"
+    },
+    {
+      "firstName": "Cornelius",
+      "lastName": "Tucker",
+      "fullAddress": "2212 Black Oak Avenue, Columbus, OH 43229",
+      "phone": "614-632-0664",
+      "pocFirst": "Ms. Gooch",
+      "pocLast": "",
+      "pocPhone": "614-657-5737",
+      "pocEmail": "",
+      "deaconTeam": "Brewton and Arnold",
+      "notes": "If no answer, cal POC"
+    }
+  ],
+  "svcDate": "Sunday, March 1, 2026",
+  "onDeck": [],
+  "unavail": [
+    "A.Hill",
+    "D. Cade"
+  ]
+}

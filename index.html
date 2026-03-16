@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#2a1648">
+<meta name="description" content="New Salem Baptist Church Communion Delivery Dashboard">
+<title>NSBC Communion Delivery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<style>
+:root{
+  --purple-deep:#2a1648;--purple-dark:#3b2060;--purple:#4e2d78;--purple-mid:#6a3f9e;
+  --purple-light:#8e60c4;--purple-soft:#a87ed8;--purple-wash:rgba(78,45,120,.10);
+  --purple-glow:rgba(106,63,158,.20);--purple-faint:rgba(142,96,196,.06);
+  --gold:#d4a843;--gold-bright:#ebc95e;--gold-dim:#b48e30;
+  --gold-pale:rgba(212,168,67,.10);--gold-ring:rgba(212,168,67,.28);
+  --bg:#160e24;--bg-el:#1e1432;--bg-card:#231840;--bg-card-h:#2c1f50;
+  --border:#352758;--border-s:#2d1e4a;
+  --text:#ede8f5;--text-mid:#bfb4d4;--text-dim:#8a7da5;
+  --red:#e05555;--green:#4ecb71;--blue:#6db3f2;--ph-green:#34c759;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100dvh;overflow-x:hidden}
+
+.cross-hero{background:linear-gradient(175deg,var(--purple-deep),var(--purple-dark) 45%,var(--purple));position:relative;overflow:hidden;padding:1.75rem 1.25rem 1.5rem;text-align:center;border-bottom:3px solid var(--gold)}
+.cross-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 400px 180px at 50% 100%,rgba(212,168,67,.07),transparent 70%),radial-gradient(ellipse 250px 200px at 15% 20%,rgba(142,96,196,.12),transparent 60%),radial-gradient(ellipse 250px 200px at 85% 20%,rgba(142,96,196,.08),transparent 60%);pointer-events:none}
+.cross-hero::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none}
+.cross-w{margin:0 auto .6rem;position:relative;width:46px;height:64px}
+.cross-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,67,.18),transparent 70%)}
+.hero-church{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(1.35rem,5vw,2rem);color:var(--text);letter-spacing:.02em;margin-bottom:.05rem}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(.88rem,3vw,1.15rem);color:var(--gold);letter-spacing:.16em;text-transform:uppercase;margin-bottom:.5rem}
+.hero-addr{font-size:.75rem;color:var(--text-dim);letter-spacing:.03em;margin-bottom:.5rem}
+.hero-date{display:inline-block;padding:.3rem 1.2rem;border:1px solid var(--gold-ring);border-radius:100px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:.9rem;color:var(--gold);background:var(--gold-pale)}
+
+.dash-nav{display:flex;gap:.4rem;padding:.75rem 1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:var(--bg-el);border-bottom:1px solid var(--border-s);position:sticky;top:0;z-index:100}
+.dash-nav::-webkit-scrollbar{display:none}
+.nav-chip{flex-shrink:0;display:flex;align-items:center;gap:.3rem;padding:.4rem .8rem;border-radius:100px;font-size:.72rem;font-weight:600;border:1px solid var(--border);color:var(--text-dim);background:transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+.nav-chip:hover,.nav-chip.active{border-color:var(--gold);color:var(--gold);background:var(--gold-pale)}
+.nav-chip .cnt{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;font-size:.6rem;font-weight:700;background:var(--purple-glow);color:var(--purple-light)}
+.nav-chip.active .cnt{background:var(--gold-pale);color:var(--gold)}
+
+.main{max-width:720px;margin:0 auto;padding:0 .75rem 6rem}
+.action-row{display:flex;gap:.45rem;padding:.85rem 0;justify-content:center;flex-wrap:wrap}
+.abtn{display:inline-flex;align-items:center;gap:.35rem;padding:.45rem 1rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.73rem;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+.abtn svg{width:14px;height:14px}
+.abtn-gold{background:linear-gradient(135deg,var(--gold-dim),var(--gold));color:var(--purple-deep)}
+.abtn-gold:hover{background:linear-gradient(135deg,var(--gold),var(--gold-bright))}
+.abtn-outline{background:transparent;border:1px solid var(--border);color:var(--text-dim)}
+.abtn-outline:hover{border-color:var(--purple-light);color:var(--purple-light)}
+.abtn-share{background:linear-gradient(135deg,var(--purple),var(--purple-mid));color:#fff}
+.abtn-share:hover{background:linear-gradient(135deg,var(--purple-mid),var(--purple-light))}
+
+.summary{display:flex;justify-content:center;gap:2rem;padding:.75rem 0 1rem;border-bottom:1px solid var(--border-s);margin-bottom:1.25rem;flex-wrap:wrap}
+.stat{text-align:center}
+.stat .n{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--gold);line-height:1.1}
+.stat .l{font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim)}
+
+.team{margin-bottom:1.5rem;scroll-margin-top:60px}
+.team-hdr{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;padding-bottom:.4rem;border-bottom:1px solid var(--border-s)}
+.team-ico{width:34px;height:34px;background:linear-gradient(135deg,var(--purple-dark),var(--purple-mid));border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:.85rem;flex-shrink:0;box-shadow:0 2px 8px rgba(78,45,120,.35)}
+.team-nm{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.05rem;color:var(--text)}
+.team-nm .vc{font-weight:400;color:var(--text-dim);font-family:'DM Sans',sans-serif;font-size:.72rem;margin-left:.4rem}
+
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:1rem 1.1rem;margin-bottom:.5rem;transition:border-color .2s,background .2s}
+.card:hover{border-color:var(--purple-glow);background:var(--bg-card-h)}
+.card:active{transform:scale(.995)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;margin-bottom:.7rem;padding-bottom:.55rem;border-bottom:1px solid var(--border-s)}
+.card-name{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.05rem;color:var(--text);line-height:1.25}
+.card-badge{flex-shrink:0;font-size:.65rem;font-weight:600;color:var(--gold);background:var(--gold-pale);border:1px solid rgba(212,168,67,.16);padding:.15rem .55rem;border-radius:100px;max-width:200px;text-align:right;line-height:1.3}
+.card-grid{display:grid;grid-template-columns:1fr;gap:.6rem}
+@media(min-width:480px){.card-grid{grid-template-columns:1fr 1fr;gap:.5rem 1.5rem}}
+.field label{display:block;font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:.1rem}
+.field p{font-size:.82rem;color:var(--text-mid);line-height:1.4;white-space:pre-line}
+.field .poc{font-weight:600;color:var(--text)}
+.tap-row{display:flex;gap:.35rem;margin-top:.35rem;flex-wrap:wrap}
+.tap-btn{display:inline-flex;align-items:center;gap:.25rem;padding:.25rem .55rem;border-radius:7px;font-size:.68rem;font-weight:600;text-decoration:none;transition:all .15s;border:none;cursor:pointer}
+.tap-btn svg{width:12px;height:12px}
+.tap-nav{color:var(--blue);background:rgba(109,179,242,.08);border:1px solid rgba(109,179,242,.12)}
+.tap-nav:hover{background:rgba(109,179,242,.16)}
+.tap-call{color:var(--ph-green);background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.12)}
+.tap-call:hover{background:rgba(52,199,89,.16)}
+
+.ondeck{margin-top:1.5rem;background:var(--gold-pale);border:1px solid rgba(212,168,67,.12);border-radius:14px;padding:1rem 1.1rem}
+.ondeck-hdr{display:flex;align-items:center;gap:.45rem;margin-bottom:.55rem}
+.ondeck-hdr h2{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:.95rem;color:var(--gold)}
+.dk-sub{margin-bottom:.5rem}.dk-sub:last-child{margin-bottom:0}
+.dk-lbl{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem}
+.dk-lbl.on{color:var(--purple-light)}.dk-lbl.off{color:var(--red)}
+.chips{display:flex;gap:.3rem;flex-wrap:wrap}
+.chip{font-size:.74rem;font-weight:500;padding:.15rem .55rem;border-radius:100px}
+.chip-on{color:var(--text-mid);background:var(--purple-wash);border:1px solid rgba(106,63,158,.18)}
+.chip-off{color:#f08080;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.12)}
+
+.foot{text-align:center;padding:1rem .75rem;margin-top:.5rem;border-top:1px solid var(--border-s)}
+.foot p{font-size:.73rem;color:var(--text-dim);font-style:italic}
+.foot a{display:inline-block;margin-top:.3rem;font-size:.68rem;font-weight:600;color:var(--gold);text-decoration:none}
+
+.upload-zone{max-width:600px;margin:2rem auto;padding:0 1rem}
+.upload-box{border:2px dashed var(--border);border-radius:16px;padding:2rem 1.5rem;text-align:center;background:var(--bg-card);transition:all .3s;cursor:pointer;position:relative}
+.upload-box:hover,.upload-box.drag-over{border-color:var(--gold);background:rgba(212,168,67,.03)}
+.upload-box input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.u-ico{width:48px;height:48px;margin:0 auto .6rem;border-radius:11px;background:var(--purple-wash);border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.u-ico svg{width:24px;height:24px;color:var(--gold)}
+.u-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.05rem;color:var(--text);margin-bottom:.3rem}
+.u-desc{font-size:.78rem;color:var(--text-dim);margin-bottom:.7rem;line-height:1.5}
+.u-fmts{display:flex;justify-content:center;gap:.35rem;flex-wrap:wrap}
+.u-fmt{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.18rem .5rem;border-radius:5px;background:var(--purple-wash);color:var(--purple-light);border:1px solid rgba(106,63,158,.15)}
+.proc{display:none;text-align:center;padding:2rem}.proc.active{display:block}
+.spin{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:sp .8s linear infinite;margin:0 auto .6rem}
+@keyframes sp{to{transform:rotate(360deg)}}
+.proc-txt{font-size:.82rem;color:var(--text-mid)}
+
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--purple-dark);color:var(--gold);padding:.55rem 1.2rem;border-radius:10px;font-size:.78rem;font-weight:600;border:1px solid var(--gold-ring);opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+#results{display:none}
+.mob-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg-el);border-top:1px solid var(--border);padding:.5rem .75rem calc(.5rem + env(safe-area-inset-bottom));z-index:200;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.mob-bar-inner{display:flex;gap:.4rem;justify-content:center}
+.mob-bar .abtn{flex:1;justify-content:center;padding:.55rem .5rem;font-size:.7rem}
+@media(max-width:640px){.card-top{flex-direction:column;gap:.3rem}.card-badge{text-align:left;max-width:100%}.summary{gap:1.2rem}.mob-bar{display:block}.action-row .desk-only{display:none}}
+@media(min-width:641px){.mob-bar{display:none}}
+@media print{body{background:#fff;color:#111}.cross-hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}.upload-zone,.action-row,.dash-nav,.mob-bar,.toast{display:none!important}.card{break-inside:avoid;border:1px solid #ccc;background:#fff}.team{break-inside:avoid}#results{display:block!important}.main{padding-bottom:1rem}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.team,.ondeck,.foot{opacity:0;animation:fadeUp .4s ease-out forwards}
+.team:nth-child(1){animation-delay:.1s}.team:nth-child(2){animation-delay:.15s}.team:nth-child(3){animation-delay:.2s}.team:nth-child(4){animation-delay:.25s}.team:nth-child(5){animation-delay:.3s}.team:nth-child(6){animation-delay:.35s}.team:nth-child(7){animation-delay:.4s}.team:nth-child(8){animation-delay:.45s}
+.ondeck{animation-delay:.5s}.foot{animation-delay:.55s}
+</style>
+</head>
+<body>
+
+<header class="cross-hero">
+  <div class="cross-w">
+    <div class="cross-glow"></div>
+    <svg width="46" height="64" viewBox="0 0 50 70" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:relative;z-index:1">
+      <defs><linearGradient id="cg" x1="25" y1="0" x2="25" y2="70" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ebc95e"/><stop offset="50%" stop-color="#d4a843"/><stop offset="100%" stop-color="#b48e30"/></linearGradient></defs>
+      <rect x="21" y="2" width="8" height="62" rx="2" fill="url(#cg)"/>
+      <rect x="7" y="16" width="36" height="8" rx="2" fill="url(#cg)"/>
+      <rect x="23.5" y="5" width="3" height="56" rx="1" fill="rgba(255,255,255,.15)"/>
+      <rect x="10" y="18.5" width="30" height="3" rx="1" fill="rgba(255,255,255,.15)"/>
+      <rect x="17" y="58" width="16" height="6" rx="1.5" fill="url(#cg)" opacity=".5"/>
+    </svg>
+  </div>
+  <div class="hero-church">New Salem Baptist Church</div>
+  <div class="hero-sub">Communion Delivery</div>
+  <div class="hero-addr">2956 Cleveland Avenue &nbsp;•&nbsp; Columbus, Ohio 43224 &nbsp;•&nbsp; (614) 267-2536</div>
+  <div class="hero-date" id="heroDate"></div>
+</header>
+
+<div class="upload-zone" id="uploadZone">
+  <div class="upload-box" id="uploadBox">
+    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv,.png,.jpg,.jpeg,.webp">
+    <div class="u-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+    <div class="u-title">Upload Communion List</div>
+    <div class="u-desc">Drag &amp; drop your monthly Excel spreadsheet or a photo/screenshot.<br>Auto-parsed, grouped by deacon team, with Google Maps &amp; tap-to-call.</div>
+    <div class="u-fmts"><span class="u-fmt">.xlsx</span><span class="u-fmt">.xls</span><span class="u-fmt">.csv</span><span class="u-fmt">.png</span><span class="u-fmt">.jpg</span></div>
+  </div>
+  <div class="proc" id="processing"><div class="spin"></div><div class="proc-txt" id="procTxt">Reading spreadsheet…</div></div>
+</div>
+
+<div id="results">
+  <nav class="dash-nav" id="dashNav"></nav>
+  <div class="main" id="mainContent"></div>
+  <div class="mob-bar" id="mobBar"><div class="mob-bar-inner">
+    <button class="abtn abtn-share" onclick="shareList()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>
+    <button class="abtn abtn-gold" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button>
+    <button class="abtn abtn-outline" onclick="resetUpload()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> New</button>
+  </div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PIN=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
+const PHN=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`;
+
+const uploadBox=document.getElementById('uploadBox'),fileInput=document.getElementById('fileInput');
+['dragenter','dragover'].forEach(e=>uploadBox.addEventListener(e,ev=>{ev.preventDefault();uploadBox.classList.add('drag-over')}));
+['dragleave','drop'].forEach(e=>uploadBox.addEventListener(e,ev=>{ev.preventDefault();uploadBox.classList.remove('drag-over')}));
+uploadBox.addEventListener('drop',ev=>{if(ev.dataTransfer.files[0])handleFile(ev.dataTransfer.files[0])});
+fileInput.addEventListener('change',ev=>{if(ev.target.files[0])handleFile(ev.target.files[0])});
+
+function handleFile(f){
+  const ext=f.name.split('.').pop().toLowerCase();
+  const isImg=['png','jpg','jpeg','webp'].includes(ext),isXl=['xlsx','xls','csv'].includes(ext);
+  if(!isImg&&!isXl){alert('Upload Excel (.xlsx/.csv) or image (.png/.jpg).');return}
+  showProc(true,isImg?'Running OCR on image…':'Reading spreadsheet…');
+  if(isImg)processImage(f);else processExcel(f);
+}
+function showProc(s,t){document.getElementById('processing').classList.toggle('active',s);uploadBox.style.display=s?'none':'';if(t)document.getElementById('procTxt').textContent=t}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+
+function mapsUrl(addr){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(addr)}
+
+/*
+ * COLUMN MAPPING — FIXED
+ * The header row contains: "Address" (C3) and "Point of Contact Email Address" (C11).
+ * Old bug: both matched `h.includes('address')`, so C11 overwrote C3.
+ * Fix: Map columns using ORDERED priority rules. Check specific compound
+ * headers FIRST (point of contact email address), then simpler ones (address).
+ */
+function mapColumns(hdr){
+  const cm={};
+  hdr.forEach((h,i)=>{
+    const lo=h.toLowerCase().replace(/[\n\r]/g,' ').trim();
+
+    // --- Point of Contact fields (check FIRST to prevent "address" collision) ---
+    if(lo.includes('point of contact')|| lo.includes('contact')){
+      if(lo.includes('first'))      { cm.pf=i; return; }
+      if(lo.includes('last'))       { cm.pl=i; return; }
+      if(lo.includes('phone'))      { cm.pp=i; return; }
+      if(lo.includes('email') || lo.includes('address')) { cm.pe=i; return; }
+      return; // unknown contact sub-field, skip
+    }
+
+    // --- Primary fields (no "contact" in header) ---
+    if(lo.includes('first name'))   { cm.fn=i; return; }
+    if(lo.includes('last name'))    { cm.ln=i; return; }
+    if(lo==='address' || lo.includes('address') && !lo.includes('email')) { cm.addr=i; return; }
+    if(lo.includes('city'))         { cm.city=i; return; }
+    if(lo.includes('state'))        { cm.state=i; return; }
+    if(lo==='zip'||lo.includes('zip')) { cm.zip=i; return; }
+    if(lo.includes('phone'))        { cm.phone=i; return; }
+    if(lo.includes('deacon')||lo.includes('team assigned')) { cm.dea=i; return; }
+    if(lo.includes('note'))         { cm.notes=i; return; }
+  });
+  return cm;
+}
+
+/*
+ * PHONE EXTRACTION — FIXED
+ * Old regex: \(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}  (? = 0 or 1 separator char)
+ * Failed on "614- 234-6000" because "- " is TWO chars.
+ * Fix: use [\s.-]* (0 or more) to handle any combo of spaces/dashes.
+ */
+function extractPhones(str){
+  if(!str)return[];
+  const m=str.match(/\(?\d{3}\)?[\s.\-]*\d{3}[\s.\-]*\d{4}/g);
+  return m?m.map(p=>p.replace(/[^\d]/g,'')):[];
+}
+function fmtPhone(d){return d.replace(/(\d{3})(\d{3})(\d{4})/,'($1) $2-$3')}
+
+// ===== EXCEL =====
+function processExcel(file){
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const R=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+
+      // Service date
+      let svc='';
+      for(let i=0;i<Math.min(6,R.length);i++){
+        const v=String(R[i][0]||'');
+        if(/sunday|monday|tuesday|wednesday|thursday|friday|saturday/i.test(v)){svc=v.trim();break}
+      }
+
+      // Header row
+      let hi=-1;
+      for(let i=0;i<Math.min(10,R.length);i++){
+        if(R[i].map(c=>String(c||'').toLowerCase()).join('|').includes('first name')){hi=i;break}
+      }
+      if(hi===-1){alert('Cannot find "First Name" header row.');showProc(false);return}
+
+      // Column map (FIXED)
+      const hdr=R[hi].map(h=>String(h||''));
+      const cm=mapColumns(hdr);
+      console.log('Column map:',cm);
+
+      const members=[],onDeck=[],unavail=[];
+      let inDeck=false,inUnavail=false;
+
+      for(let i=hi+1;i<R.length;i++){
+        const row=R[i];
+        const fc=String(row[0]||'').trim();
+
+        if(/deacon\s*teams?\s*on\s*deck/i.test(fc)){inDeck=true;inUnavail=false;continue}
+        if(inDeck){
+          if(/unavailable/i.test(fc)){inUnavail=true;continue}
+          if(fc&&fc.length<40){(inUnavail?unavail:onDeck).push(fc)}
+          continue;
+        }
+
+        const g=k=>{const idx=cm[k];return idx!==undefined&&idx<row.length?String(row[idx]||'').replace(/\xa0/g,' ').trim():''};
+        const fn=g('fn'),ln=g('ln');
+        if(!fn&&!ln)continue;
+
+        // Address: clean newlines/semicolons for display
+        const addrRaw=g('addr').replace(/\\n/g,', ').replace(/\n/g,', ').replace(/;\s*/g,', ').replace(/,\s*,/g,',').replace(/,\s*$/,'').trim();
+        const city=g('city'),state=g('state');
+        const zipVal=cm.zip!==undefined&&cm.zip<row.length?String(row[cm.zip]||'').trim():'';
+        const phone=g('phone').replace(/\\n/g,'\n');
+        const pf=g('pf'),pl=g('pl'),pp=g('pp').replace(/\\n/g,'\n'),pe=g('pe');
+        let team=g('dea').replace(/^Deacons?\s*/i,'').replace(/[Mm]arshell/g,'Marshall').trim()||'Unassigned';
+        const notes=g('notes');
+
+        // Full display address
+        const fullAddress=[addrRaw,city,[state,zipVal].filter(Boolean).join(' ')].filter(Boolean).join(', ');
+
+        members.push({firstName:fn,lastName:ln,fullAddress,phone,pocFirst:pf,pocLast:pl,pocPhone:pp,pocEmail:pe,deaconTeam:team,notes});
+      }
+
+      if(!members.length){alert('No member data found.');showProc(false);return}
+      renderResults(members,svc,onDeck,unavail);
+    }catch(err){console.error(err);alert('Error: '+err.message);showProc(false)}
+  };reader.readAsArrayBuffer(file);
+}
+
+// ===== IMAGE OCR =====
+function processImage(file){
+  const reader=new FileReader();
+  reader.onload=async function(e){
+    try{
+      document.getElementById('procTxt').textContent='Running OCR…';
+      const{data:{text}}=await Tesseract.recognize(e.target.result,'eng',{logger:m=>{if(m.status==='recognizing text')document.getElementById('procTxt').textContent=`Recognizing… ${Math.round((m.progress||0)*100)}%`}});
+      const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
+      const members=[];let started=false;
+      for(const line of lines){
+        if(/first\s*name|last\s*name|deacon/i.test(line)){started=true;continue}
+        if(!started)continue;if(/deacon\s*teams?\s*on\s*deck|unavailable/i.test(line))break;
+        if(line.length<10)continue;
+        const p=line.split(/\t|\s{2,}/).map(s=>s.trim()).filter(Boolean);
+        if(p.length<3)continue;
+        let dt=p.slice(-2).join(' ').replace(/^Deacons?\s*/i,'').replace(/[Mm]arshell/g,'Marshall').trim()||'Unassigned';
+        const fa=[p[2],p[3],p[4],p[5]].filter(Boolean).join(', ');
+        members.push({firstName:p[0]||'',lastName:p[1]||'',fullAddress:fa,phone:p[6]||'',pocFirst:'',pocLast:'',pocPhone:'',pocEmail:'',deaconTeam:dt,notes:''});
+      }
+      if(!members.length){alert('Could not parse image. Try Excel.');showProc(false);return}
+      renderResults(members,'',[],[]);
+    }catch(err){console.error(err);alert('OCR error: '+err.message);showProc(false)}
+  };reader.readAsDataURL(file);
+}
+
+// ===== RENDER =====
+let _lastData=null,_listId=null;
+function renderResults(members,svcDate,onDeck,unavail){
+  _lastData={members,svcDate,onDeck,unavail};
+  if(svcDate)document.getElementById('heroDate').textContent=svcDate;
+
+  // If loaded via ?list=ID, keep the short URL; otherwise encode into hash
+  if(_listId){
+    history.replaceState(null,'',location.pathname+'?list='+_listId);
+  }else{
+    try{
+      const payload=JSON.stringify(_lastData);
+      const encoded=btoa(unescape(encodeURIComponent(payload)));
+      history.replaceState(null,'',location.pathname+'#data='+encoded);
+    }catch(e){console.warn('Share encode error',e)}
+  }
+
+  const grouped={};
+  members.forEach(m=>{if(!grouped[m.deaconTeam])grouped[m.deaconTeam]=[];grouped[m.deaconTeam].push(m)});
+  const teams=Object.keys(grouped).sort();
+
+  let nav='<div class="nav-chip active" onclick="scrollToTeam(this,\'all\')">All <span class="cnt">'+members.length+'</span></div>';
+  teams.forEach(t=>{
+    const short=t.split(' and ')[0];
+    nav+=`<div class="nav-chip" onclick="scrollToTeam(this,'${esc(t)}')">${esc(short)} <span class="cnt">${grouped[t].length}</span></div>`;
+  });
+  document.getElementById('dashNav').innerHTML=nav;
+
+  let h='';
+  h+=`<div class="action-row">
+    <button class="abtn abtn-share" onclick="shareList()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share Dashboard</button>
+    <button class="abtn abtn-gold desk-only" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button>
+    <button class="abtn abtn-outline" onclick="exportJSON()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Save JSON</button>
+    <button class="abtn abtn-outline" onclick="resetUpload()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Upload New List</button>
+  </div>`;
+
+  h+=`<div class="summary"><div class="stat"><div class="n">${members.length}</div><div class="l">Members</div></div><div class="stat"><div class="n">${teams.length}</div><div class="l">Teams</div></div><div class="stat"><div class="n">${members.length}</div><div class="l">Visits</div></div></div>`;
+
+  teams.forEach(team=>{
+    const tm=grouped[team];
+    const tid=team.replace(/[^a-zA-Z0-9]/g,'_');
+    h+=`<section class="team" id="team_${tid}"><div class="team-hdr"><div class="team-ico">✟</div><div class="team-nm">Dcns. ${esc(team)} <span class="vc">${tm.length} visit${tm.length!==1?'s':''}</span></div></div>`;
+
+    tm.forEach(m=>{
+      const name=esc(`${m.firstName} ${m.lastName}`);
+      const mapLink=mapsUrl(m.fullAddress);
+      const phones=extractPhones(m.phone);
+      const pocPhones=extractPhones(m.pocPhone);
+      const pn=[m.pocFirst,m.pocLast].filter(Boolean).join(' ');
+
+      let phoneHtml=m.phone?`<p>${esc(m.phone)}</p>`:'<p>—</p>';
+      if(phones.length)phoneHtml+=`<div class="tap-row">${phones.map(p=>`<a class="tap-btn tap-call" href="tel:${p}">${PHN} ${fmtPhone(p)}</a>`).join('')}</div>`;
+
+      let pocHtml='';
+      if(pn||m.pocPhone){
+        pocHtml+=`<label style="margin-top:.4rem">Point of Contact</label>`;
+        if(pn)pocHtml+=`<p><span class="poc">${esc(pn)}</span></p>`;
+        if(m.pocPhone)pocHtml+=`<p>${esc(m.pocPhone)}</p>`;
+        if(pocPhones.length)pocHtml+=`<div class="tap-row">${pocPhones.map(p=>`<a class="tap-btn tap-call" href="tel:${p}">${PHN} ${fmtPhone(p)}</a>`).join('')}</div>`;
+      }
+
+      h+=`<div class="card">
+        <div class="card-top"><div class="card-name">${name}</div>${m.notes?`<div class="card-badge">${esc(m.notes)}</div>`:''}</div>
+        <div class="card-grid">
+          <div class="field"><label>Address</label><p>${esc(m.fullAddress)}</p><div class="tap-row"><a class="tap-btn tap-nav" href="${mapLink}" target="_blank" rel="noopener">${PIN} Navigate</a></div></div>
+          <div class="field"><label>Phone</label>${phoneHtml}${pocHtml}</div>
+        </div>
+      </div>`;
+    });
+    h+=`</section>`;
+  });
+
+  if(onDeck.length||unavail.length){
+    h+=`<section class="ondeck"><div class="ondeck-hdr"><span style="font-size:.95rem">⏳</span><h2>Deacon Teams On Deck</h2></div>`;
+    if(onDeck.length)h+=`<div class="dk-sub"><div class="dk-lbl on">On Deck</div><div class="chips">${onDeck.map(n=>`<span class="chip chip-on">${esc(n)}</span>`).join('')}</div></div>`;
+    if(unavail.length)h+=`<div class="dk-sub"><div class="dk-lbl off">Unavailable</div><div class="chips">${unavail.map(n=>`<span class="chip chip-off">${esc(n)}</span>`).join('')}</div></div>`;
+    h+=`</section>`;
+  }
+
+  h+=`<footer class="foot"><p>Please contact the church office with any questions or updates.</p><a href="https://newsalemcares.com" target="_blank">newsalemcares.com</a></footer>`;
+
+  document.getElementById('mainContent').innerHTML=h;
+  document.getElementById('results').style.display='block';
+  document.getElementById('uploadZone').style.display='none';
+}
+
+function scrollToTeam(chip,id){
+  document.querySelectorAll('.nav-chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  if(id==='all'){window.scrollTo({top:0,behavior:'smooth'});return}
+  const el=document.getElementById('team_'+id.replace(/[^a-zA-Z0-9]/g,'_'));
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function shareList(){
+  const url=window.location.href;
+  const title='NSBC Communion Delivery';
+  const text=(document.getElementById('heroDate').textContent||'')+' — '+title;
+  if(navigator.share){navigator.share({title,text,url}).catch(()=>{})}
+  else{navigator.clipboard.writeText(url).then(()=>toast('Dashboard link copied!')).catch(()=>alert('Copy this link:\n'+url))}
+}
+
+function resetUpload(){
+  document.getElementById('results').style.display='none';
+  document.getElementById('uploadZone').style.display='';
+  uploadBox.style.display='';
+  document.getElementById('processing').classList.remove('active');
+  fileInput.value='';
+  history.replaceState(null,'',location.pathname);
+}
+
+function exportJSON(){
+  if(!_lastData){alert('No data to export.');return}
+  const name=prompt('Enter a short list ID (e.g. dec2025, jan2026):','');
+  if(!name)return;
+  const safeId=name.replace(/[^a-zA-Z0-9_-]/g,'');
+  const blob=new Blob([JSON.stringify(_lastData,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=safeId+'.json';a.click();
+  toast('Saved '+safeId+'.json — add it to lists/ folder and push to GitHub');
+}
+
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+// Load from ?list=ID (short link) or #data= (legacy inline link)
+(function(){
+  const params=new URLSearchParams(location.search);
+  const listId=params.get('list');
+  if(listId){
+    // Fetch hosted JSON file
+    const safeId=listId.replace(/[^a-zA-Z0-9_-]/g,'');
+    showProc(true,'Loading list…');
+    document.getElementById('uploadZone').querySelector('.upload-box').style.display='none';
+    fetch('lists/'+safeId+'.json')
+      .then(r=>{if(!r.ok)throw new Error('List not found: '+safeId);return r.json()})
+      .then(data=>{
+        if(data&&data.members&&data.members.length){
+          _listId=safeId;
+          renderResults(data.members,data.svcDate||'',data.onDeck||[],data.unavail||[]);
+        }else{alert('List is empty.');showProc(false);document.getElementById('uploadZone').querySelector('.upload-box').style.display=''}
+      })
+      .catch(e=>{console.error(e);alert('Could not load list "'+safeId+'". Make sure lists/'+safeId+'.json exists.');showProc(false);document.getElementById('uploadZone').querySelector('.upload-box').style.display=''});
+    return;
+  }
+  // Legacy: load from URL hash
+  const hash=location.hash;
+  if(!hash||!hash.startsWith('#data='))return;
+  try{
+    const json=decodeURIComponent(escape(atob(hash.slice(6))));
+    const data=JSON.parse(json);
+    if(data&&data.members&&data.members.length)renderResults(data.members,data.svcDate||'',data.onDeck||[],data.unavail||[]);
+  }catch(e){console.warn('Could not load shared data',e)}
+})();
+</script>
+</body>
+</html>
