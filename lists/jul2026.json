@@ -1,0 +1,132 @@
+{
+  "members": [
+    {
+      "firstName": "Martha",
+      "lastName": "Pack",
+      "fullAddress": "Woodlands of Columbus, 5380 E. Broad St., Rm # 313, Columbus, OH 43224",
+      "phone": "614-569-2586",
+      "pocFirst": "Carolyn",
+      "pocLast": "Green",
+      "pocPhone": "614-501-2997",
+      "pocEmail": "",
+      "deaconTeam": "Fortson and Cade",
+      "notes": "Call ahead"
+    },
+    {
+      "firstName": "Richard",
+      "lastName": "Harris",
+      "fullAddress": "Riverview, 3710 Olentangy River Rd, Room #115, Columbus, OH 43214",
+      "phone": "614-216-8742",
+      "pocFirst": "Joyce",
+      "pocLast": "Harris",
+      "pocPhone": "614-216-8742",
+      "pocEmail": "",
+      "deaconTeam": "Scott and Marshall",
+      "notes": "Call his wife"
+    },
+    {
+      "firstName": "Margo",
+      "lastName": "Rhodes",
+      "fullAddress": "Bickford of Bexley, 2600 E Main St., Apt # 208, Bexley, OH 43209",
+      "phone": "614-327-1542",
+      "pocFirst": "Margo",
+      "pocLast": "Rhodes",
+      "pocPhone": "614-327-1542",
+      "pocEmail": "",
+      "deaconTeam": "Brown and Taylor",
+      "notes": "Call ahead (To be served after 1:00 PM - Lunch)"
+    },
+    {
+      "firstName": "Joyce",
+      "lastName": "Moody",
+      "fullAddress": "McNaughton Point\r, 1425 Yorkland RD, Columbus, OH 43232",
+      "phone": "614-751-2525",
+      "pocFirst": "Nursing",
+      "pocLast": "Staff",
+      "pocPhone": "Nursing Home#\r\n614-751-2525",
+      "pocEmail": "",
+      "deaconTeam": "Nelson and E.Hill",
+      "notes": "Call ahead"
+    },
+    {
+      "firstName": "Raymond",
+      "lastName": "Miller",
+      "fullAddress": "West Park Care Center, 1700 Heinzerling Drive, Columbus, OH 43223",
+      "phone": "220-262-3591",
+      "pocFirst": "Receptionist",
+      "pocLast": "—",
+      "pocPhone": "614-274-4222",
+      "pocEmail": "",
+      "deaconTeam": "Brown and Taylor",
+      "notes": "Call ahead"
+    },
+    {
+      "firstName": "Marcialene",
+      "lastName": "Slate",
+      "fullAddress": "3656 Florian Drive, Columbus, OH 43219",
+      "phone": "614-306-7658",
+      "pocFirst": "",
+      "pocLast": "",
+      "pocPhone": "",
+      "pocEmail": "",
+      "deaconTeam": "Arnold and Granger",
+      "notes": "Call ahead"
+    },
+    {
+      "firstName": "Walter & Essie",
+      "lastName": "Richardson",
+      "fullAddress": "6241 Kinver Edge Way, Columbus, OH 43213",
+      "phone": "Home# 614-755-4936",
+      "pocFirst": "Walter",
+      "pocLast": "Richardson",
+      "pocPhone": "614-530-5130",
+      "pocEmail": "",
+      "deaconTeam": "Fortson and Cade",
+      "notes": "Call Ahead"
+    },
+    {
+      "firstName": "Raymond & Hanna",
+      "lastName": "Brown",
+      "fullAddress": "7672 Deer Creek Drive, Worthington, OH 43085",
+      "phone": "(614) 846-6009",
+      "pocFirst": "Raymond",
+      "pocLast": "Brown",
+      "pocPhone": "(614) 846-6009",
+      "pocEmail": "",
+      "deaconTeam": "Scott and Marshall",
+      "notes": "Call Ahead"
+    },
+    {
+      "firstName": "Betty",
+      "lastName": "Lester",
+      "fullAddress": "3219 Astor Avenue, Columbus, OH 43227",
+      "phone": "(614) 252-579-5805",
+      "pocFirst": "Betty",
+      "pocLast": "Lester",
+      "pocPhone": "(614) 252-5622",
+      "pocEmail": "",
+      "deaconTeam": "Nelson and E. Hill",
+      "notes": "Call Ahead"
+    },
+    {
+      "firstName": "Brenda",
+      "lastName": "Murphy-Calloway",
+      "fullAddress": "1270 Elmore Avenue, Columbus, OH 43224",
+      "phone": "(614) 296-7862",
+      "pocFirst": "Brenda",
+      "pocLast": "Murphy-Calloway",
+      "pocPhone": "(614) 296-7862",
+      "pocEmail": "",
+      "deaconTeam": "Arnold and Granger",
+      "notes": "Call Ahead"
+    }
+  ],
+  "svcDate": "Sunday, July 5, 2026",
+  "onDeck": [],
+  "unavail": [
+    "D. Harrison",
+    "A.Hill",
+    "L. Brewton",
+    "T.Robinson"
+  ]
+}
