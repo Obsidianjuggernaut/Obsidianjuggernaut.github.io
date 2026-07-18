@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#2a1648">
@@ -11,156 +12,176 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
 :root{
   --purple-deep:#2a1648;--purple-dark:#3b2060;--purple:#4e2d78;--purple-mid:#6a3f9e;
-  --purple-light:#8e60c4;--purple-soft:#a87ed8;--purple-wash:rgba(78,45,120,.10);
-  --purple-glow:rgba(106,63,158,.20);--purple-faint:rgba(142,96,196,.06);
-  --gold:#d4a843;--gold-bright:#ebc95e;--gold-dim:#b48e30;
-  --gold-pale:rgba(212,168,67,.10);--gold-ring:rgba(212,168,67,.28);
-  --bg:#160e24;--bg-el:#1e1432;--bg-card:#231840;--bg-card-h:#2c1f50;
-  --border:#352758;--border-s:#2d1e4a;
-  --text:#ede8f5;--text-mid:#bfb4d4;--text-dim:#8a7da5;
-  --red:#e05555;--green:#4ecb71;--blue:#6db3f2;--ph-green:#34c759;
+  --purple-light:#a37fd4;--purple-soft:#bb99e4;--purple-wash:rgba(78,45,120,.14);
+  --purple-glow:rgba(106,63,158,.25);
+  --gold:#dfb254;--gold-bright:#f0d47a;--gold-dim:#b48e30;
+  --gold-pale:rgba(223,178,84,.12);--gold-ring:rgba(223,178,84,.35);
+  --bg:#160e24;--bg-el:#1e1432;--bg-card:#241943;--bg-card-h:#2c1f50;
+  --border:#3d2e63;--border-s:#32224f;
+  --text:#f2edfa;--text-mid:#d3c8e6;--text-dim:#a99bc4;
+  --red:#f07575;--green:#5cd67f;--blue:#8cc3f7;--ph-green:#4fd66e;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100dvh;overflow-x:hidden}
+body{font-family:'DM Sans',sans-serif;font-size:17px;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100dvh;overflow-x:hidden}
 
+/* ===== Hero ===== */
 .cross-hero{background:linear-gradient(175deg,var(--purple-deep),var(--purple-dark) 45%,var(--purple));position:relative;overflow:hidden;padding:1.75rem 1.25rem 1.5rem;text-align:center;border-bottom:3px solid var(--gold)}
 .cross-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 400px 180px at 50% 100%,rgba(212,168,67,.07),transparent 70%),radial-gradient(ellipse 250px 200px at 15% 20%,rgba(142,96,196,.12),transparent 60%),radial-gradient(ellipse 250px 200px at 85% 20%,rgba(142,96,196,.08),transparent 60%);pointer-events:none}
-.cross-hero::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none}
 .cross-w{margin:0 auto .6rem;position:relative;width:46px;height:64px}
 .cross-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,67,.18),transparent 70%)}
-.hero-church{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(1.35rem,5vw,2rem);color:var(--text);letter-spacing:.02em;margin-bottom:.05rem}
-.hero-sub{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(.88rem,3vw,1.15rem);color:var(--gold);letter-spacing:.16em;text-transform:uppercase;margin-bottom:.5rem}
-.hero-addr{font-size:.75rem;color:var(--text-dim);letter-spacing:.03em;margin-bottom:.5rem}
-.hero-date{display:inline-block;padding:.3rem 1.2rem;border:1px solid var(--gold-ring);border-radius:100px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:.9rem;color:var(--gold);background:var(--gold-pale)}
+.hero-church{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(1.5rem,5vw,2.1rem);color:var(--text);letter-spacing:.02em;margin-bottom:.05rem}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(1rem,3vw,1.25rem);color:var(--gold-bright);letter-spacing:.16em;text-transform:uppercase;margin-bottom:.5rem}
+.hero-addr{font-size:.9rem;color:var(--text-dim);letter-spacing:.03em;margin-bottom:.6rem}
+.hero-date{display:inline-block;padding:.4rem 1.4rem;border:1px solid var(--gold-ring);border-radius:100px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.05rem;color:var(--gold-bright);background:var(--gold-pale)}
 
-.dash-nav{display:flex;gap:.4rem;padding:.75rem 1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:var(--bg-el);border-bottom:1px solid var(--border-s);position:sticky;top:0;z-index:100}
-.dash-nav::-webkit-scrollbar{display:none}
-.nav-chip{flex-shrink:0;display:flex;align-items:center;gap:.3rem;padding:.4rem .8rem;border-radius:100px;font-size:.72rem;font-weight:600;border:1px solid var(--border);color:var(--text-dim);background:transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
-.nav-chip:hover,.nav-chip.active{border-color:var(--gold);color:var(--gold);background:var(--gold-pale)}
-.nav-chip .cnt{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;font-size:.6rem;font-weight:700;background:var(--purple-glow);color:var(--purple-light)}
-.nav-chip.active .cnt{background:var(--gold-pale);color:var(--gold)}
+/* ===== Shared UI ===== */
+.main{max-width:720px;margin:0 auto;padding:0 .9rem 7rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:52px;padding:.8rem 1.5rem;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:1.02rem;font-weight:700;cursor:pointer;border:none;transition:all .2s;text-decoration:none;line-height:1.2}
+.btn svg{width:20px;height:20px;flex-shrink:0}
+.btn-gold{background:linear-gradient(135deg,var(--gold-dim),var(--gold));color:var(--purple-deep)}
+.btn-gold:hover{background:linear-gradient(135deg,var(--gold),var(--gold-bright))}
+.btn-purple{background:linear-gradient(135deg,var(--purple),var(--purple-mid));color:#fff}
+.btn-purple:hover{background:linear-gradient(135deg,var(--purple-mid),var(--purple-light))}
+.btn-outline{background:transparent;border:2px solid var(--border);color:var(--text-mid)}
+.btn-outline:hover{border-color:var(--purple-light);color:var(--purple-soft)}
+.btn-block{display:flex;width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-sm{min-height:44px;padding:.55rem 1.1rem;font-size:.95rem;font-weight:600}
 
-.main{max-width:720px;margin:0 auto;padding:0 .75rem 6rem}
-.action-row{display:flex;gap:.45rem;padding:.85rem 0;justify-content:center;flex-wrap:wrap}
-.abtn{display:inline-flex;align-items:center;gap:.35rem;padding:.45rem 1rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.73rem;font-weight:600;cursor:pointer;border:none;transition:all .2s}
-.abtn svg{width:14px;height:14px}
-.abtn-gold{background:linear-gradient(135deg,var(--gold-dim),var(--gold));color:var(--purple-deep)}
-.abtn-gold:hover{background:linear-gradient(135deg,var(--gold),var(--gold-bright))}
-.abtn-outline{background:transparent;border:1px solid var(--border);color:var(--text-dim)}
-.abtn-outline:hover{border-color:var(--purple-light);color:var(--purple-light)}
-.abtn-share{background:linear-gradient(135deg,var(--purple),var(--purple-mid));color:#fff}
-.abtn-share:hover{background:linear-gradient(135deg,var(--purple-mid),var(--purple-light))}
+.notice{max-width:640px;margin:1rem auto;padding:1rem 1.2rem;border-radius:12px;font-size:1rem;line-height:1.55;display:none}
+.notice.show{display:block}
+.notice-info{background:var(--gold-pale);border:1px solid var(--gold-ring);color:var(--gold-bright)}
+.notice-error{background:rgba(240,117,117,.1);border:1px solid rgba(240,117,117,.3);color:var(--red)}
 
-.summary{display:flex;justify-content:center;gap:2rem;padding:.75rem 0 1rem;border-bottom:1px solid var(--border-s);margin-bottom:1.25rem;flex-wrap:wrap}
-.stat{text-align:center}
-.stat .n{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--gold);line-height:1.1}
-.stat .l{font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim)}
-
-.team{margin-bottom:1.5rem;scroll-margin-top:60px}
-.team-hdr{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;padding-bottom:.4rem;border-bottom:1px solid var(--border-s)}
-.team-ico{width:34px;height:34px;background:linear-gradient(135deg,var(--purple-dark),var(--purple-mid));border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:.85rem;flex-shrink:0;box-shadow:0 2px 8px rgba(78,45,120,.35)}
-.team-nm{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.05rem;color:var(--text)}
-.team-nm .vc{font-weight:400;color:var(--text-dim);font-family:'DM Sans',sans-serif;font-size:.72rem;margin-left:.4rem}
-
-.card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:1rem 1.1rem;margin-bottom:.5rem;transition:border-color .2s,background .2s}
-.card:hover{border-color:var(--purple-glow);background:var(--bg-card-h)}
-.card:active{transform:scale(.995)}
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;margin-bottom:.7rem;padding-bottom:.55rem;border-bottom:1px solid var(--border-s)}
-.card-name{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.05rem;color:var(--text);line-height:1.25}
-.card-badge{flex-shrink:0;font-size:.65rem;font-weight:600;color:var(--gold);background:var(--gold-pale);border:1px solid rgba(212,168,67,.16);padding:.15rem .55rem;border-radius:100px;max-width:200px;text-align:right;line-height:1.3}
-.card-grid{display:grid;grid-template-columns:1fr;gap:.6rem}
-@media(min-width:480px){.card-grid{grid-template-columns:1fr 1fr;gap:.5rem 1.5rem}}
-.field label{display:block;font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:.1rem}
-.field p{font-size:.82rem;color:var(--text-mid);line-height:1.4;white-space:pre-line}
-.field .poc{font-weight:600;color:var(--text)}
-.tap-row{display:flex;gap:.35rem;margin-top:.35rem;flex-wrap:wrap}
-.tap-btn{display:inline-flex;align-items:center;gap:.25rem;padding:.25rem .55rem;border-radius:7px;font-size:.68rem;font-weight:600;text-decoration:none;transition:all .15s;border:none;cursor:pointer}
-.tap-btn svg{width:12px;height:12px}
-.tap-nav{color:var(--blue);background:rgba(109,179,242,.08);border:1px solid rgba(109,179,242,.12)}
-.tap-nav:hover{background:rgba(109,179,242,.16)}
-.tap-call{color:var(--ph-green);background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.12)}
-.tap-call:hover{background:rgba(52,199,89,.16)}
-
-.ondeck{margin-top:1.5rem;background:var(--gold-pale);border:1px solid rgba(212,168,67,.12);border-radius:14px;padding:1rem 1.1rem}
-.ondeck-hdr{display:flex;align-items:center;gap:.45rem;margin-bottom:.55rem}
-.ondeck-hdr h2{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:.95rem;color:var(--gold)}
-.dk-sub{margin-bottom:.5rem}.dk-sub:last-child{margin-bottom:0}
-.dk-lbl{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem}
-.dk-lbl.on{color:var(--purple-light)}.dk-lbl.off{color:var(--red)}
-.chips{display:flex;gap:.3rem;flex-wrap:wrap}
-.chip{font-size:.74rem;font-weight:500;padding:.15rem .55rem;border-radius:100px}
-.chip-on{color:var(--text-mid);background:var(--purple-wash);border:1px solid rgba(106,63,158,.18)}
-.chip-off{color:#f08080;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.12)}
-
-.foot{text-align:center;padding:1rem .75rem;margin-top:.5rem;border-top:1px solid var(--border-s)}
-.foot p{font-size:.73rem;color:var(--text-dim);font-style:italic}
-.foot a{display:inline-block;margin-top:.3rem;font-size:.68rem;font-weight:600;color:var(--gold);text-decoration:none}
-
-.upload-zone{max-width:600px;margin:2rem auto;padding:0 1rem}
-.upload-box{border:2px dashed var(--border);border-radius:16px;padding:2rem 1.5rem;text-align:center;background:var(--bg-card);transition:all .3s;cursor:pointer;position:relative}
-.upload-box:hover,.upload-box.drag-over{border-color:var(--gold);background:rgba(212,168,67,.03)}
-.upload-box input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer}
-.u-ico{width:48px;height:48px;margin:0 auto .6rem;border-radius:11px;background:var(--purple-wash);border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
-.u-ico svg{width:24px;height:24px;color:var(--gold)}
-.u-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.05rem;color:var(--text);margin-bottom:.3rem}
-.u-desc{font-size:.78rem;color:var(--text-dim);margin-bottom:.7rem;line-height:1.5}
-.u-fmts{display:flex;justify-content:center;gap:.35rem;flex-wrap:wrap}
-.u-fmt{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.18rem .5rem;border-radius:5px;background:var(--purple-wash);color:var(--purple-light);border:1px solid rgba(106,63,158,.15)}
-.proc{display:none;text-align:center;padding:2rem}.proc.active{display:block}
-.spin{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:sp .8s linear infinite;margin:0 auto .6rem}
-@keyframes sp{to{transform:rotate(360deg)}}
-.proc-txt{font-size:.82rem;color:var(--text-mid)}
-
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--purple-dark);color:var(--gold);padding:.55rem 1.2rem;border-radius:10px;font-size:.78rem;font-weight:600;border:1px solid var(--gold-ring);opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap}
+.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--purple-dark);color:var(--gold-bright);padding:.8rem 1.5rem;border-radius:12px;font-size:1rem;font-weight:600;border:1px solid var(--gold-ring);opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-#results{display:none}
-.mob-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg-el);border-top:1px solid var(--border);padding:.5rem .75rem calc(.5rem + env(safe-area-inset-bottom));z-index:200;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.mob-bar-inner{display:flex;gap:.4rem;justify-content:center}
-.mob-bar .abtn{flex:1;justify-content:center;padding:.55rem .5rem;font-size:.7rem}
-@media(max-width:640px){.card-top{flex-direction:column;gap:.3rem}.card-badge{text-align:left;max-width:100%}.summary{gap:1.2rem}.mob-bar{display:block}.action-row .desk-only{display:none}}
+/* ===== Steps indicator ===== */
+.steps{display:flex;justify-content:center;gap:.4rem;padding:1.5rem 1rem .5rem;align-items:center}
+.step{display:flex;align-items:center;gap:.5rem}
+.step-dot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.05rem;background:var(--bg-card);border:2px solid var(--border);color:var(--text-dim);transition:all .3s}
+.step.active .step-dot{background:var(--gold);border-color:var(--gold);color:var(--purple-deep)}
+.step.done .step-dot{background:var(--purple-mid);border-color:var(--purple-mid);color:#fff}
+.step-lbl{font-size:.95rem;font-weight:600;color:var(--text-dim)}
+.step.active .step-lbl{color:var(--gold-bright)}
+.step.done .step-lbl{color:var(--purple-soft)}
+.step-line{width:28px;height:2px;background:var(--border);margin:0 .2rem}
+@media(max-width:480px){.step-lbl{display:none}.step.active .step-lbl{display:inline}}
+
+/* ===== Upload view ===== */
+.upload-zone{max-width:640px;margin:1rem auto;padding:0 1rem}
+.upload-box{border:2px dashed var(--border);border-radius:18px;padding:2.5rem 1.5rem;text-align:center;background:var(--bg-card);transition:all .3s;cursor:pointer;position:relative}
+.upload-box:hover,.upload-box.drag-over{border-color:var(--gold);background:rgba(212,168,67,.04)}
+.upload-box input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.u-ico{width:64px;height:64px;margin:0 auto .8rem;border-radius:14px;background:var(--purple-wash);border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.u-ico svg{width:32px;height:32px;color:var(--gold)}
+.u-title{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.4rem;color:var(--text);margin-bottom:.4rem}
+.u-desc{font-size:1rem;color:var(--text-mid);margin-bottom:1rem;line-height:1.6}
+.u-fmts{display:flex;justify-content:center;gap:.4rem;flex-wrap:wrap}
+.u-fmt{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.25rem .65rem;border-radius:6px;background:var(--purple-wash);color:var(--purple-soft);border:1px solid rgba(106,63,158,.2)}
+.u-alt{text-align:center;margin-top:1rem}
+.u-alt a{font-size:.92rem;color:var(--text-dim);text-decoration:underline;cursor:pointer}
+.proc{display:none;text-align:center;padding:2.5rem 1rem}.proc.active{display:block}
+.spin{width:44px;height:44px;border:4px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:sp .8s linear infinite;margin:0 auto .8rem}
+@keyframes sp{to{transform:rotate(360deg)}}
+.proc-txt{font-size:1.05rem;color:var(--text-mid)}
+
+/* ===== Review view ===== */
+.review-wrap{max-width:640px;margin:0 auto;padding:0 1rem}
+.review-sum{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.4rem;margin-bottom:1rem}
+.review-sum h2{font-family:'Cormorant Garamond',serif;font-size:1.35rem;color:var(--gold-bright);margin-bottom:.8rem}
+.rv-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border-s);font-size:1.02rem;gap:.8rem;flex-wrap:wrap}
+.rv-row:last-child{border-bottom:none}
+.rv-row .k{color:var(--text-dim)}
+.rv-row .v{color:var(--text);font-weight:600;text-align:right}
+.month-pick{display:flex;gap:.6rem;margin-top:.2rem}
+.month-pick select{min-height:52px;padding:.6rem .8rem;border-radius:10px;background:var(--bg-el);border:2px solid var(--border);color:var(--text);font-size:1.02rem;font-family:'DM Sans',sans-serif}
+.pass-field{margin:1rem 0}
+.pass-field label{display:block;font-size:.95rem;font-weight:600;color:var(--text-mid);margin-bottom:.4rem}
+.pass-field input{width:100%;min-height:52px;padding:.6rem 1rem;border-radius:10px;background:var(--bg-el);border:2px solid var(--border);color:var(--text);font-size:1.1rem;letter-spacing:.1em}
+.pass-field input:focus{outline:none;border-color:var(--gold)}
+.pass-hint{font-size:.88rem;color:var(--text-dim);margin-top:.35rem}
+.review-actions{display:flex;flex-direction:column;gap:.7rem;margin:1.2rem 0}
+
+/* ===== Share view ===== */
+.share-wrap{max-width:640px;margin:0 auto;padding:0 1rem 3rem;text-align:center}
+.share-check{width:72px;height:72px;margin:1.5rem auto 1rem;border-radius:50%;background:rgba(92,214,127,.12);border:2px solid rgba(92,214,127,.4);display:flex;align-items:center;justify-content:center}
+.share-check svg{width:36px;height:36px;color:var(--green)}
+.share-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
+.share-sub{font-size:1.02rem;color:var(--text-mid);margin-bottom:1.3rem}
+.link-box{background:var(--bg-card);border:2px solid var(--gold-ring);border-radius:14px;padding:1.1rem 1.2rem;font-size:1.05rem;color:var(--gold-bright);word-break:break-all;margin-bottom:1.2rem;font-weight:600}
+.share-btns{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.5rem}
+
+/* ===== Viewer ===== */
+.dash-nav{display:flex;gap:.5rem;padding:.85rem 1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:var(--bg-el);border-bottom:1px solid var(--border-s);position:sticky;top:0;z-index:100}
+.dash-nav::-webkit-scrollbar{display:none}
+.nav-chip{flex-shrink:0;display:flex;align-items:center;gap:.4rem;min-height:44px;padding:.55rem 1.05rem;border-radius:100px;font-size:.95rem;font-weight:600;border:1px solid var(--border);color:var(--text-dim);background:transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+.nav-chip:hover,.nav-chip.active{border-color:var(--gold);color:var(--gold-bright);background:var(--gold-pale)}
+.nav-chip .cnt{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;border-radius:12px;font-size:.8rem;font-weight:700;background:var(--purple-glow);color:var(--purple-soft);padding:0 .3rem}
+.nav-chip.active .cnt{background:var(--gold-pale);color:var(--gold-bright)}
+
+.action-row{display:flex;gap:.6rem;padding:1rem 0;justify-content:center;flex-wrap:wrap}
+.summary{display:flex;justify-content:center;gap:2.2rem;padding:.75rem 0 1rem;border-bottom:1px solid var(--border-s);margin-bottom:1.4rem;flex-wrap:wrap}
+.stat{text-align:center}
+.stat .n{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--gold-bright);line-height:1.1}
+.stat .l{font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim)}
+
+.team{margin-bottom:1.75rem;scroll-margin-top:70px}
+.team-hdr{display:flex;align-items:center;gap:.7rem;margin-bottom:.6rem;padding-bottom:.5rem;border-bottom:1px solid var(--border-s)}
+.team-ico{width:42px;height:42px;background:linear-gradient(135deg,var(--purple-dark),var(--purple-mid));border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold-bright);font-size:1.05rem;flex-shrink:0;box-shadow:0 2px 8px rgba(78,45,120,.35)}
+.team-nm{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.3rem;color:var(--text)}
+.team-nm .vc{font-weight:400;color:var(--text-dim);font-family:'DM Sans',sans-serif;font-size:.9rem;margin-left:.45rem}
+
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.2rem 1.3rem;margin-bottom:.7rem;transition:border-color .2s,background .2s}
+.card:hover{border-color:var(--purple-glow);background:var(--bg-card-h)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.6rem;margin-bottom:.8rem;padding-bottom:.65rem;border-bottom:1px solid var(--border-s)}
+.card-name{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.3rem;color:var(--text);line-height:1.25}
+.card-badge{flex-shrink:0;font-size:.85rem;font-weight:600;color:var(--gold-bright);background:var(--gold-pale);border:1px solid rgba(212,168,67,.2);padding:.3rem .75rem;border-radius:100px;max-width:220px;text-align:right;line-height:1.35}
+.card-grid{display:grid;grid-template-columns:1fr;gap:.8rem}
+@media(min-width:480px){.card-grid{grid-template-columns:1fr 1fr;gap:.6rem 1.6rem}}
+.field label{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:.15rem}
+.field p{font-size:1rem;color:var(--text-mid);line-height:1.5;white-space:pre-line}
+.field .poc{font-weight:700;color:var(--text)}
+.tap-row{display:flex;gap:.45rem;margin-top:.45rem;flex-wrap:wrap}
+.tap-btn{display:inline-flex;align-items:center;gap:.35rem;min-height:44px;padding:.5rem .9rem;border-radius:10px;font-size:.92rem;font-weight:600;text-decoration:none;transition:all .15s;border:none;cursor:pointer}
+.tap-btn svg{width:17px;height:17px}
+.tap-nav{color:var(--blue);background:rgba(140,195,247,.1);border:1px solid rgba(140,195,247,.18)}
+.tap-nav:hover{background:rgba(140,195,247,.2)}
+.tap-call{color:var(--ph-green);background:rgba(79,214,110,.1);border:1px solid rgba(79,214,110,.18)}
+.tap-call:hover{background:rgba(79,214,110,.2)}
+
+.ondeck{margin-top:1.75rem;background:var(--gold-pale);border:1px solid rgba(212,168,67,.15);border-radius:16px;padding:1.2rem 1.3rem}
+.ondeck-hdr{display:flex;align-items:center;gap:.5rem;margin-bottom:.65rem}
+.ondeck-hdr h2{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.15rem;color:var(--gold-bright)}
+.dk-sub{margin-bottom:.6rem}.dk-sub:last-child{margin-bottom:0}
+.dk-lbl{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem}
+.dk-lbl.on{color:var(--purple-soft)}.dk-lbl.off{color:var(--red)}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap}
+.chip{font-size:.92rem;font-weight:500;padding:.3rem .75rem;border-radius:100px}
+.chip-on{color:var(--text-mid);background:var(--purple-wash);border:1px solid rgba(106,63,158,.22)}
+.chip-off{color:#f5a0a0;background:rgba(224,85,85,.09);border:1px solid rgba(224,85,85,.16)}
+
+.foot{text-align:center;padding:1.2rem .75rem;margin-top:.6rem;border-top:1px solid var(--border-s)}
+.foot p{font-size:.92rem;color:var(--text-dim);font-style:italic}
+.foot a{display:inline-block;margin-top:.35rem;font-size:.88rem;font-weight:600;color:var(--gold);text-decoration:none}
+.foot .foot-adv{display:block;margin-top:.6rem;font-size:.8rem;color:var(--text-dim);font-style:normal}
+.foot .foot-adv a{font-size:.8rem;color:var(--text-dim);text-decoration:underline;font-weight:400;margin:0 .3rem;cursor:pointer}
+
+.mob-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg-el);border-top:1px solid var(--border);padding:.6rem .75rem calc(.6rem + env(safe-area-inset-bottom));z-index:200;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.mob-bar-inner{display:flex;gap:.5rem;justify-content:center}
+.mob-bar .btn{flex:1;min-height:50px;padding:.6rem .5rem;font-size:.92rem}
+@media(max-width:640px){.card-top{flex-direction:column;gap:.35rem}.card-badge{text-align:left;max-width:100%}.summary{gap:1.4rem}.mob-bar{display:block}.action-row .desk-only{display:none}}
 @media(min-width:641px){.mob-bar{display:none}}
-@media print{body{background:#fff;color:#111}.cross-hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}.upload-zone,.action-row,.dash-nav,.mob-bar,.toast{display:none!important}.card{break-inside:avoid;border:1px solid #ccc;background:#fff}.team{break-inside:avoid}#results{display:block!important}.main{padding-bottom:1rem}}
+
+@media print{body{background:#fff;color:#111}.cross-hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}.upload-zone,.action-row,.dash-nav,.mob-bar,.toast,.steps,.notice{display:none!important}.card{break-inside:avoid;border:1px solid #ccc;background:#fff}.card-name,.team-nm{color:#111}.field p{color:#333}.team{break-inside:avoid}.main{padding-bottom:1rem}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .team,.ondeck,.foot{opacity:0;animation:fadeUp .4s ease-out forwards}
 .team:nth-child(1){animation-delay:.1s}.team:nth-child(2){animation-delay:.15s}.team:nth-child(3){animation-delay:.2s}.team:nth-child(4){animation-delay:.25s}.team:nth-child(5){animation-delay:.3s}.team:nth-child(6){animation-delay:.35s}.team:nth-child(7){animation-delay:.4s}.team:nth-child(8){animation-delay:.45s}
 .ondeck{animation-delay:.5s}.foot{animation-delay:.55s}
-
-.readme{max-width:780px;margin:2rem auto;padding:0 1rem 6rem}
-.readme-inner{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
-.readme-hdr{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;cursor:pointer;user-select:none;border-bottom:1px solid var(--border-s);background:linear-gradient(135deg,var(--purple-deep),var(--purple-dark))}
-.readme-hdr:hover{background:linear-gradient(135deg,var(--purple-dark),var(--purple))}
-.readme-hdr h2{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.15rem;color:var(--gold)}
-.readme-toggle{color:var(--gold);font-size:.8rem;transition:transform .3s}
-.readme-toggle.open{transform:rotate(180deg)}
-.readme-body{padding:1.5rem 1.5rem 2rem;display:none}
-.readme-body.open{display:block}
-.readme-body h3{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.1rem;color:var(--text);margin:1.5rem 0 .5rem;padding-bottom:.3rem;border-bottom:1px solid var(--border-s)}
-.readme-body h3:first-of-type{margin-top:0}
-.readme-body h4{font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;color:var(--purple-light);margin:1rem 0 .4rem}
-.readme-body p{font-size:.82rem;color:var(--text-mid);line-height:1.6;margin-bottom:.6rem}
-.readme-lead{font-size:.88rem!important;color:var(--text)!important;line-height:1.7!important}
-.readme-body ul,.readme-body ol{padding-left:1.4rem;margin-bottom:.8rem}
-.readme-body li{font-size:.82rem;color:var(--text-mid);line-height:1.6;margin-bottom:.25rem}
-.readme-body li ul{margin-top:.25rem;margin-bottom:.25rem}
-.readme-body strong{color:var(--text)}
-.readme-body a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(212,168,67,.25)}
-.readme-body a:hover{color:var(--gold-bright);border-bottom-color:var(--gold-bright)}
-.readme-body code{font-size:.78rem;background:var(--purple-wash);color:var(--purple-light);padding:.12rem .4rem;border-radius:4px;font-family:'SF Mono',Monaco,Consolas,monospace}
-.readme-body pre{background:var(--bg);border:1px solid var(--border-s);border-radius:10px;padding:.85rem 1rem;font-size:.74rem;color:var(--text-mid);overflow-x:auto;margin:.6rem 0 1rem;line-height:1.5;font-family:'SF Mono',Monaco,Consolas,monospace;white-space:pre}
-.readme-diagram{font-size:.68rem!important;line-height:1.4!important}
-.readme-body hr{border:none;border-top:1px solid var(--border-s);margin:1.5rem 0}
-.readme-table-wrap{overflow-x:auto;margin:.6rem 0 1rem}
-.readme-body table{width:100%;border-collapse:collapse;font-size:.78rem}
-.readme-body th{text-align:left;padding:.45rem .6rem;background:var(--purple-wash);color:var(--purple-light);font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
-.readme-body td{padding:.4rem .6rem;color:var(--text-mid);border-bottom:1px solid var(--border-s)}
-.readme-body tr:hover td{background:var(--purple-faint)}
-@media print{.readme{display:none!important}}
 </style>
 </head>
 <body>
@@ -180,366 +201,219 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);lin
   <div class="hero-church">New Salem Baptist Church</div>
   <div class="hero-sub">Communion Delivery</div>
   <div class="hero-addr">2956 Cleveland Avenue &nbsp;•&nbsp; Columbus, Ohio 43224 &nbsp;•&nbsp; (614) 267-2536</div>
-  <div class="hero-date" id="heroDate"></div>
+  <div class="hero-date" id="heroDate" style="display:none"></div>
 </header>
 
-<div class="upload-zone" id="uploadZone">
-  <div class="upload-box" id="uploadBox">
-    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv,.png,.jpg,.jpeg,.webp">
-    <div class="u-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-    <div class="u-title">Upload Communion List</div>
-    <div class="u-desc">Drag &amp; drop your monthly Excel spreadsheet or a photo/screenshot.<br>Auto-parsed, grouped by deacon team, with Google Maps &amp; tap-to-call.</div>
-    <div class="u-fmts"><span class="u-fmt">.xlsx</span><span class="u-fmt">.xls</span><span class="u-fmt">.csv</span><span class="u-fmt">.png</span><span class="u-fmt">.jpg</span></div>
+<div class="notice" id="notice"></div>
+
+<!-- ===== VIEW: upload ===== -->
+<div id="viewUpload" style="display:none">
+  <div class="steps">
+    <div class="step active"><div class="step-dot">1</div><span class="step-lbl">Upload</span></div>
+    <div class="step-line"></div>
+    <div class="step"><div class="step-dot">2</div><span class="step-lbl">Check</span></div>
+    <div class="step-line"></div>
+    <div class="step"><div class="step-dot">3</div><span class="step-lbl">Share</span></div>
   </div>
-  <div class="proc" id="processing"><div class="spin"></div><div class="proc-txt" id="procTxt">Reading spreadsheet…</div></div>
+  <div class="upload-zone" id="uploadZone">
+    <div class="upload-box" id="uploadBox">
+      <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" aria-label="Upload communion list spreadsheet">
+      <div class="u-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      <div class="u-title">Upload the communion list</div>
+      <div class="u-desc">Tap here to choose this month's Excel file,<br>or drag and drop it onto this box.</div>
+      <div class="u-fmts"><span class="u-fmt">.xlsx</span><span class="u-fmt">.xls</span><span class="u-fmt">.csv</span></div>
+    </div>
+    <div class="proc" id="processing"><div class="spin"></div><div class="proc-txt" id="procTxt">Reading spreadsheet…</div></div>
+    <div class="u-alt"><a onclick="backToViewer()">Back to the current list</a></div>
+  </div>
 </div>
 
-<div id="results">
+<!-- ===== VIEW: review ===== -->
+<div id="viewReview" style="display:none">
+  <div class="steps">
+    <div class="step done"><div class="step-dot">✓</div><span class="step-lbl">Upload</span></div>
+    <div class="step-line"></div>
+    <div class="step active"><div class="step-dot">2</div><span class="step-lbl">Check</span></div>
+    <div class="step-line"></div>
+    <div class="step"><div class="step-dot">3</div><span class="step-lbl">Share</span></div>
+  </div>
+  <div class="review-wrap">
+    <div class="review-sum">
+      <h2>Does this look right?</h2>
+      <div class="rv-row"><span class="k">Service date</span><span class="v" id="rvDate">—</span></div>
+      <div class="rv-row"><span class="k">Members to visit</span><span class="v" id="rvMembers">—</span></div>
+      <div class="rv-row"><span class="k">Deacon teams</span><span class="v" id="rvTeams">—</span></div>
+      <div class="rv-row" style="align-items:center"><span class="k">Posting for</span>
+        <span class="month-pick"><select id="rvMonth" aria-label="Month"></select><select id="rvYear" aria-label="Year"></select></span>
+      </div>
+    </div>
+    <div class="pass-field" id="passField">
+      <label for="passInput">Ministry code</label>
+      <input type="text" id="passInput" inputmode="text" autocomplete="off" placeholder="Enter the ministry code">
+      <div class="pass-hint">Ask Deacon Granger if you don't have the code. Your phone remembers it after the first time.</div>
+    </div>
+    <div class="review-actions">
+      <button class="btn btn-gold btn-block" id="publishBtn" onclick="publishList()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        Post the list &amp; get the link
+      </button>
+      <button class="btn btn-outline btn-block" onclick="previewParsed()">See the full list first</button>
+      <button class="btn btn-outline btn-block" onclick="startUpload()">Start over with a different file</button>
+    </div>
+    <div class="notice notice-error" id="pubError"></div>
+  </div>
+</div>
+
+<!-- ===== VIEW: share ===== -->
+<div id="viewShare" style="display:none">
+  <div class="steps">
+    <div class="step done"><div class="step-dot">✓</div><span class="step-lbl">Upload</span></div>
+    <div class="step-line"></div>
+    <div class="step done"><div class="step-dot">✓</div><span class="step-lbl">Check</span></div>
+    <div class="step-line"></div>
+    <div class="step active"><div class="step-dot">3</div><span class="step-lbl">Share</span></div>
+  </div>
+  <div class="share-wrap">
+    <div class="share-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <div class="share-title">The list is posted</div>
+    <div class="share-sub" id="shareSub">Send this link to the ministry. It opens the list on any phone.</div>
+    <div class="link-box" id="shareLink">…</div>
+    <div class="share-btns">
+      <button class="btn btn-gold btn-block" onclick="copyShareLink()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy the link
+      </button>
+      <a class="btn btn-purple btn-block" id="smsBtn" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        Text it
+      </a>
+      <a class="btn btn-purple btn-block" id="emailBtn" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email it
+      </a>
+      <button class="btn btn-outline btn-block" onclick="viewPublished()">See the finished list</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VIEW: viewer (the dashboard) ===== -->
+<div id="results" style="display:none">
   <nav class="dash-nav" id="dashNav"></nav>
   <div class="main" id="mainContent"></div>
   <div class="mob-bar" id="mobBar"><div class="mob-bar-inner">
-    <button class="abtn abtn-share" onclick="shareList()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>
-    <button class="abtn abtn-gold" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button>
-    <button class="abtn abtn-outline" onclick="resetUpload()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> New</button>
+    <button class="btn btn-purple" onclick="shareCurrent()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>
+    <button class="btn btn-gold" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button>
   </div></div>
 </div>
+
 <div class="toast" id="toast"></div>
 
-<section class="readme" id="readme">
-  <div class="readme-inner">
-    <div class="readme-hdr" onclick="toggleReadme()">
-      <h2>✟ About This Dashboard</h2>
-      <span class="readme-toggle" id="readmeToggle">▼</span>
-    </div>
-    <div class="readme-body" id="readmeBody">
-
-      <p class="readme-lead">A mobile-first, shareable web dashboard for managing monthly communion delivery assignments at <strong>New Salem Baptist Church</strong> (Columbus, Ohio). Upload an Excel spreadsheet or photo of the communion list — the dashboard automatically parses, groups by deacon team, and generates a live page with Google Maps navigation and tap-to-call links that can be shared with any deacon via a single URL.</p>
-
-      <hr>
-
-      <h3>The Problem</h3>
-      <p>Every month, church administrators create an Excel spreadsheet listing homebound members who need communion delivered. Deacon teams are assigned visits, but distributing the list means printing paper copies or emailing a spreadsheet that's hard to use on a phone — especially when a deacon is driving between stops and needs quick access to an address, phone number, or navigation directions.</p>
-
-      <h3>The Solution</h3>
-      <p><strong>One HTML file. No server. No app install. No accounts.</strong></p>
-      <ol>
-        <li>Open the dashboard in any browser</li>
-        <li>Upload the monthly Excel spreadsheet (or a screenshot of it)</li>
-        <li>The dashboard renders instantly — grouped by deacon team with full details</li>
-        <li>Share the URL — it contains the entire dataset encoded in the link</li>
-        <li>Deacons open the link on their phones and get:
-          <ul>
-            <li><strong>Tap-to-Navigate</strong> → opens Google Maps with turn-by-turn directions</li>
-            <li><strong>Tap-to-Call</strong> → dials the member or point of contact directly</li>
-            <li><strong>Team filtering</strong> → sticky nav bar to jump to their specific assignment</li>
-            <li><strong>Print-ready</strong> layout for those who still want paper</li>
-          </ul>
-        </li>
-      </ol>
-
-      <hr>
-
-      <h3>Features</h3>
-
-      <h4>📊 Smart Excel Parsing</h4>
-      <ul>
-        <li>Auto-detects header row and maps columns by name (First Name, Last Name, Address, City, State, Zip, Phone, POC, Deacon Team, Notes)</li>
-        <li>Handles merged cells, multi-line cell content, semicolon-delimited addresses, and facility names</li>
-        <li>Parses the "Deacon Teams On Deck" and "Unavailable" sections at the bottom of the spreadsheet</li>
-        <li>Extracts the service date from the spreadsheet header automatically</li>
-        <li>Auto-corrects known spelling issues (e.g., "Marshell" → "Marshall")</li>
-      </ul>
-
-      <h4>📸 Image Upload (OCR)</h4>
-      <ul>
-        <li>Upload a photo or screenshot of the spreadsheet instead of the Excel file</li>
-        <li>Uses <a href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener">Tesseract.js</a> for in-browser OCR</li>
-        <li>Best-effort parsing — Excel upload is recommended for full accuracy</li>
-      </ul>
-
-      <h4>🔗 Shareable Links (No Server Required)</h4>
-      <ul>
-        <li>After upload, the browser URL updates with a <code>#data=</code> hash containing the full dataset (base64-encoded JSON)</li>
-        <li>Anyone who opens that URL sees the complete dashboard — <strong>no upload needed on their end</strong></li>
-        <li>Works via text message, email, AirDrop, or any link-sharing method</li>
-        <li>Typical payload is ~5KB — well within URL limits for all modern browsers and messaging apps</li>
-      </ul>
-
-      <h4>📱 Mobile-First Design</h4>
-      <ul>
-        <li>Responsive card layout optimized for phone screens</li>
-        <li><strong>Tap-to-Call</strong> buttons for every phone number (member, facility, point of contact)</li>
-        <li><strong>Navigate</strong> buttons that open Google Maps with the full address</li>
-        <li>Sticky team navigation bar for quick access</li>
-        <li>Fixed bottom action bar on mobile (Share, Print, Upload New)</li>
-        <li>Native share sheet integration on iOS/Android</li>
-        <li>Safe area support for notched devices</li>
-      </ul>
-
-      <h4>🖨️ Print-Ready</h4>
-      <ul>
-        <li>Clean print stylesheet hides all interactive elements</li>
-        <li>Cards avoid page breaks</li>
-        <li>Works with any browser's print dialog or "Save as PDF"</li>
-      </ul>
-
-      <h4>✟ Church-Branded Theme</h4>
-      <ul>
-        <li>Royal purple and gold color scheme inspired by <a href="https://newsalemcares.com" target="_blank" rel="noopener">newsalemcares.com</a></li>
-        <li>Gold Christian cross with radial glow in the header</li>
-        <li>Cormorant Garamond serif headings with DM Sans body text</li>
-        <li>Subtle cross-pattern texture overlay</li>
-        <li>Entrance animations for a polished experience</li>
-      </ul>
-
-      <hr>
-
-      <h3>Getting Started</h3>
-
-      <h4>Quick Start (Local)</h4>
-      <ol>
-        <li>Download <code>NSBC_Communion_Delivery.html</code></li>
-        <li>Open it in any modern browser (Chrome, Safari, Firefox, Edge)</li>
-        <li>Upload your Excel spreadsheet (<code>.xlsx</code>, <code>.xls</code>, or <code>.csv</code>)</li>
-        <li>Done — the dashboard renders with all data</li>
-      </ol>
-
-      <h4>Hosting for Shareable Links</h4>
-      <p>For the shareable URL feature to work, the HTML file needs to be hosted at an accessible URL. Options:</p>
-      <div class="readme-table-wrap">
-        <table>
-          <thead><tr><th>Host</th><th>Cost</th><th>Setup Time</th><th>URL Format</th></tr></thead>
-          <tbody>
-            <tr><td><strong>GitHub Pages</strong></td><td>Free</td><td>5 min</td><td><code>username.github.io</code></td></tr>
-            <tr><td><strong>Netlify Drop</strong></td><td>Free</td><td>30 sec</td><td><code>random-name.netlify.app</code></td></tr>
-            <tr><td><strong>Tiiny.host</strong></td><td>Free</td><td>30 sec</td><td><code>your-name.tiiny.site</code></td></tr>
-            <tr><td><strong>Church website</strong></td><td>—</td><td>Varies</td><td><code>newsalemcares.com/communion/</code></td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <hr>
-
-      <h3>Spreadsheet Format</h3>
-      <p>The dashboard expects an Excel spreadsheet with this structure:</p>
-
-      <h4>Header Rows (Rows 1–4)</h4>
-      <pre>Row 1: New Salem Baptist Church - Communion Delivery
-Row 2: 2956 Cleveland Avenue
-Row 3: Columbus, Ohio 43224
-Row 4: Sunday, March 1, 2026    ← service date (auto-detected)</pre>
-
-      <h4>Column Headers (Row 5)</h4>
-      <div class="readme-table-wrap">
-        <table>
-          <thead><tr><th>Column</th><th>Header</th><th>Required</th></tr></thead>
-          <tbody>
-            <tr><td>A</td><td>First Name</td><td>✅</td></tr>
-            <tr><td>B</td><td>Last Name</td><td>✅</td></tr>
-            <tr><td>C</td><td>Address</td><td>✅</td></tr>
-            <tr><td>D</td><td>City</td><td>✅</td></tr>
-            <tr><td>E</td><td>State</td><td>✅</td></tr>
-            <tr><td>F</td><td>Zip</td><td>✅</td></tr>
-            <tr><td>G</td><td>Phone Number</td><td>Recommended</td></tr>
-            <tr><td>H</td><td>POC First Name</td><td>Optional</td></tr>
-            <tr><td>I</td><td>POC Last Name</td><td>Optional</td></tr>
-            <tr><td>J</td><td>POC Phone</td><td>Optional</td></tr>
-            <tr><td>K</td><td>POC Email</td><td>Optional</td></tr>
-            <tr><td>L</td><td>Deacon(s) Team Assigned</td><td>✅</td></tr>
-            <tr><td>M</td><td>Notes</td><td>Optional</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h4>On Deck / Unavailable Section (After data rows)</h4>
-      <pre>Row N:   Deacon Teams On Deck
-Row N+1: [team names]
-Row N+2: Unavailable
-Row N+3: A. Hill
-Row N+4: D. Cade</pre>
-
-      <hr>
-
-      <h3>How Sharing Works</h3>
-      <pre class="readme-diagram">┌─────────────────────────────────────────────────────┐
-│  ADMINISTRATOR                                       │
-│                                                       │
-│  1. Opens hosted dashboard URL                        │
-│  2. Uploads monthly Excel spreadsheet                 │
-│  3. Dashboard renders with all data                   │
-│  4. URL auto-updates with encoded data               │
-│  5. Clicks "Share Dashboard" button                   │
-│                                                       │
-│         ┌──────────────────────────┐                  │
-│         │  📱 Native Share Sheet   │                  │
-│         │  • Text Message          │                  │
-│         │  • Email                 │                  │
-│         │  • AirDrop               │                  │
-│         │  • Copy Link             │                  │
-│         └──────────────────────────┘                  │
-│                      │                                │
-└──────────────────────┼────────────────────────────────┘
-                       │
-                       ▼
-┌─────────────────────────────────────────────────────┐
-│  DEACONS (on their phones)                           │
-│                                                       │
-│  1. Tap the shared link                               │
-│  2. Dashboard loads instantly (data is in the URL)    │
-│  3. Find their team in the sticky nav bar             │
-│  4. Tap "Navigate" → Google Maps directions           │
-│  5. Tap phone number → calls the member               │
-│                                                       │
-│  No upload needed. No app needed. No account needed.  │
-└─────────────────────────────────────────────────────┘</pre>
-
-      <hr>
-
-      <h3>Technology</h3>
-      <p>This is a <strong>single HTML file</strong> with zero build steps and zero server dependencies.</p>
-      <div class="readme-table-wrap">
-        <table>
-          <thead><tr><th>Component</th><th>Technology</th></tr></thead>
-          <tbody>
-            <tr><td>UI Framework</td><td>Vanilla HTML/CSS/JS</td></tr>
-            <tr><td>Excel Parsing</td><td><a href="https://sheetjs.com/" target="_blank" rel="noopener">SheetJS (xlsx)</a> via CDN</td></tr>
-            <tr><td>Image OCR</td><td><a href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener">Tesseract.js v5</a> via CDN</td></tr>
-            <tr><td>Fonts</td><td>Google Fonts (Cormorant Garamond + DM Sans)</td></tr>
-            <tr><td>Maps</td><td>Google Maps Search URLs</td></tr>
-            <tr><td>Phone Links</td><td><code>tel:</code> URI scheme</td></tr>
-            <tr><td>Data Sharing</td><td>Base64-encoded JSON in URL hash fragment</td></tr>
-            <tr><td>Hosting</td><td>Any static file host (or local file)</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p><strong>No npm. No build. No backend. No database. No API keys.</strong></p>
-
-      <hr>
-
-      <h3>Browser Support</h3>
-      <div class="readme-table-wrap">
-        <table>
-          <thead><tr><th>Browser</th><th>Desktop</th><th>Mobile</th></tr></thead>
-          <tbody>
-            <tr><td>Chrome</td><td>✅</td><td>✅</td></tr>
-            <tr><td>Safari</td><td>✅</td><td>✅ (iOS)</td></tr>
-            <tr><td>Firefox</td><td>✅</td><td>✅</td></tr>
-            <tr><td>Edge</td><td>✅</td><td>✅</td></tr>
-            <tr><td>Samsung Internet</td><td>—</td><td>✅</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <hr>
-
-      <h3>Customization</h3>
-
-      <h4>Changing the Church Name / Address</h4>
-      <p>Edit the HTML header section — search for "New Salem Baptist Church" and update the text and contact info.</p>
-
-      <h4>Changing the Color Theme</h4>
-      <p>All colors are defined as CSS variables at the top of the <code>&lt;style&gt;</code> block:</p>
-      <pre>:root {
-  --purple-deep: #2a1648;    /* Darkest background */
-  --purple-dark: #3b2060;    /* Card backgrounds */
-  --purple: #4e2d78;         /* Accent elements */
-  --purple-mid: #6a3f9e;     /* Hover states */
-  --gold: #d4a843;           /* Primary accent */
-  --gold-bright: #ebc95e;    /* Hover accent */
-  --bg: #160e24;             /* Page background */
-  --bg-card: #231840;        /* Card background */
-}</pre>
-
-      <h4>Adding New Column Mappings</h4>
-      <p>The <code>mapColumns()</code> function in the JavaScript section handles header-to-field mapping. Add new patterns to support additional column headers from different spreadsheet formats.</p>
-
-      <hr>
-
-      <h3>Project Background</h3>
-      <p>This project was built to solve a real operational need at New Salem Baptist Church in Columbus, Ohio. The church's deacon ministry coordinates monthly communion delivery to homebound members across the Columbus metro area. The previous workflow involved printing Excel spreadsheets — this dashboard digitizes the process while keeping it simple enough for anyone to use.</p>
-      <p>Built with <a href="https://claude.ai" target="_blank" rel="noopener">Claude AI</a> by Anthropic.</p>
-
-      <hr>
-
-      <h3>License</h3>
-      <p>MIT License — free to use, modify, and distribute. Built for the glory of God and the service of His people.</p>
-      <p>If your church would benefit from a similar tool, feel free to fork and customize.</p>
-
-    </div>
-  </div>
-</section>
-
 <script>
+/* ============================================================
+ * NSBC Communion Delivery — v2
+ * Deacon flow: Upload -> Check -> Share. Publishing goes through
+ * a Cloudflare Worker that saves the list to this site, so the
+ * share link is always short: ?list=jul2026
+ * ============================================================ */
+
+// Set after the Worker is deployed. While empty, the publish
+// button explains that online posting is not switched on yet.
+// (localStorage override lets us test against a staging endpoint
+// without editing the live page.)
+const PUBLISH_ENDPOINT=localStorage.getItem('nsbc_endpoint_override')||'';
+const SITE_URL=location.origin+location.pathname.replace(/index\.html$/,'');
+
+const MONTHS=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+const MONTH_NAMES=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
 const PIN=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
 const PHN=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`;
 
+let _lastData=null;   // data currently shown in the viewer
+let _pending=null;    // parsed upload awaiting review/publish
+let _listId=null;     // id of the published list being viewed
+let _publishedId=null,_publishedUrl=null;
+
+// ---------- View switching ----------
+const VIEWS={upload:'viewUpload',review:'viewReview',share:'viewShare',viewer:'results'};
+function showView(name){
+  Object.values(VIEWS).forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById(VIEWS[name]).style.display='block';
+  document.getElementById('heroDate').style.display=(name==='viewer'&&_lastData&&_lastData.svcDate)?'inline-block':'none';
+  window.scrollTo({top:0});
+}
+function notice(msg,kind){
+  const n=document.getElementById('notice');
+  if(!msg){n.className='notice';n.textContent='';return}
+  n.className='notice show '+(kind==='error'?'notice-error':'notice-info');
+  n.textContent=msg;
+}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+
+// ---------- Upload handling ----------
 const uploadBox=document.getElementById('uploadBox'),fileInput=document.getElementById('fileInput');
 ['dragenter','dragover'].forEach(e=>uploadBox.addEventListener(e,ev=>{ev.preventDefault();uploadBox.classList.add('drag-over')}));
 ['dragleave','drop'].forEach(e=>uploadBox.addEventListener(e,ev=>{ev.preventDefault();uploadBox.classList.remove('drag-over')}));
 uploadBox.addEventListener('drop',ev=>{if(ev.dataTransfer.files[0])handleFile(ev.dataTransfer.files[0])});
 fileInput.addEventListener('change',ev=>{if(ev.target.files[0])handleFile(ev.target.files[0])});
 
+function startUpload(){
+  _pending=null;fileInput.value='';
+  showProc(false);notice('');
+  showView('upload');
+}
+function backToViewer(){
+  notice('');
+  if(_lastData){showView('viewer');return}
+  loadBest();
+}
 function handleFile(f){
   const ext=f.name.split('.').pop().toLowerCase();
-  const isImg=['png','jpg','jpeg','webp'].includes(ext),isXl=['xlsx','xls','csv'].includes(ext);
-  if(!isImg&&!isXl){alert('Upload Excel (.xlsx/.csv) or image (.png/.jpg).');return}
-  showProc(true,isImg?'Running OCR on image…':'Reading spreadsheet…');
-  if(isImg)processImage(f);else processExcel(f);
+  if(!['xlsx','xls','csv'].includes(ext)){
+    notice('That file type will not work. Please upload the Excel file (.xlsx) from the church office.','error');
+    return;
+  }
+  notice('');
+  showProc(true,'Reading spreadsheet…');
+  processExcel(f);
 }
 function showProc(s,t){document.getElementById('processing').classList.toggle('active',s);uploadBox.style.display=s?'none':'';if(t)document.getElementById('procTxt').textContent=t}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
-function mapsUrl(addr){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(addr)}
-
-/*
- * COLUMN MAPPING — FIXED
- * The header row contains: "Address" (C3) and "Point of Contact Email Address" (C11).
- * Old bug: both matched `h.includes('address')`, so C11 overwrote C3.
- * Fix: Map columns using ORDERED priority rules. Check specific compound
- * headers FIRST (point of contact email address), then simpler ones (address).
- */
+// ---------- Column mapping (ordered rules; "Point of Contact
+// Email Address" must not collide with "Address") ----------
 function mapColumns(hdr){
   const cm={};
   hdr.forEach((h,i)=>{
     const lo=h.toLowerCase().replace(/[\n\r]/g,' ').trim();
-
-    // --- Point of Contact fields (check FIRST to prevent "address" collision) ---
-    if(lo.includes('point of contact')|| lo.includes('contact')){
-      if(lo.includes('first'))      { cm.pf=i; return; }
-      if(lo.includes('last'))       { cm.pl=i; return; }
-      if(lo.includes('phone'))      { cm.pp=i; return; }
-      if(lo.includes('email') || lo.includes('address')) { cm.pe=i; return; }
-      return; // unknown contact sub-field, skip
+    if(lo.includes('point of contact')||lo.includes('contact')){
+      if(lo.includes('first')){cm.pf=i;return}
+      if(lo.includes('last')){cm.pl=i;return}
+      if(lo.includes('phone')){cm.pp=i;return}
+      if(lo.includes('email')||lo.includes('address')){cm.pe=i;return}
+      return;
     }
-
-    // --- Primary fields (no "contact" in header) ---
-    if(lo.includes('first name'))   { cm.fn=i; return; }
-    if(lo.includes('last name'))    { cm.ln=i; return; }
-    if(lo==='address' || lo.includes('address') && !lo.includes('email')) { cm.addr=i; return; }
-    if(lo.includes('city'))         { cm.city=i; return; }
-    if(lo.includes('state'))        { cm.state=i; return; }
-    if(lo==='zip'||lo.includes('zip')) { cm.zip=i; return; }
-    if(lo.includes('phone'))        { cm.phone=i; return; }
-    if(lo.includes('deacon')||lo.includes('team assigned')) { cm.dea=i; return; }
-    if(lo.includes('note'))         { cm.notes=i; return; }
+    if(lo.includes('first name')){cm.fn=i;return}
+    if(lo.includes('last name')){cm.ln=i;return}
+    if(lo==='address'||lo.includes('address')&&!lo.includes('email')){cm.addr=i;return}
+    if(lo.includes('city')){cm.city=i;return}
+    if(lo.includes('state')){cm.state=i;return}
+    if(lo==='zip'||lo.includes('zip')){cm.zip=i;return}
+    if(lo.includes('phone')){cm.phone=i;return}
+    if(lo.includes('deacon')||lo.includes('team assigned')){cm.dea=i;return}
+    if(lo.includes('note')){cm.notes=i;return}
   });
   return cm;
 }
-
-/*
- * PHONE EXTRACTION — FIXED
- * Old regex: \(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}  (? = 0 or 1 separator char)
- * Failed on "614- 234-6000" because "- " is TWO chars.
- * Fix: use [\s.-]* (0 or more) to handle any combo of spaces/dashes.
- */
 function extractPhones(str){
   if(!str)return[];
   const m=str.match(/\(?\d{3}\)?[\s.\-]*\d{3}[\s.\-]*\d{4}/g);
   return m?m.map(p=>p.replace(/[^\d]/g,'')):[];
 }
 function fmtPhone(d){return d.replace(/(\d{3})(\d{3})(\d{4})/,'($1) $2-$3')}
+function mapsUrl(addr){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(addr)}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
-// ===== EXCEL =====
+// ---------- Excel parsing ----------
 function processExcel(file){
   const reader=new FileReader();
   reader.onload=function(e){
@@ -548,44 +422,38 @@ function processExcel(file){
       const ws=wb.Sheets[wb.SheetNames[0]];
       const R=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
 
-      // Service date
       let svc='';
       for(let i=0;i<Math.min(6,R.length);i++){
         const v=String(R[i][0]||'');
         if(/sunday|monday|tuesday|wednesday|thursday|friday|saturday/i.test(v)){svc=v.trim();break}
       }
 
-      // Header row
       let hi=-1;
       for(let i=0;i<Math.min(10,R.length);i++){
         if(R[i].map(c=>String(c||'').toLowerCase()).join('|').includes('first name')){hi=i;break}
       }
-      if(hi===-1){alert('Cannot find "First Name" header row.');showProc(false);return}
+      if(hi===-1){
+        showProc(false);
+        notice('This does not look like the communion list — the "First Name" row was not found. Make sure you picked the right file, or call Deacon Granger for help.','error');
+        return;
+      }
 
-      // Column map (FIXED)
-      const hdr=R[hi].map(h=>String(h||''));
-      const cm=mapColumns(hdr);
-      console.log('Column map:',cm);
-
+      const cm=mapColumns(R[hi].map(h=>String(h||'')));
       const members=[],onDeck=[],unavail=[];
       let inDeck=false,inUnavail=false;
 
       for(let i=hi+1;i<R.length;i++){
         const row=R[i];
         const fc=String(row[0]||'').trim();
-
         if(/deacon\s*teams?\s*on\s*deck/i.test(fc)){inDeck=true;inUnavail=false;continue}
         if(inDeck){
           if(/unavailable/i.test(fc)){inUnavail=true;continue}
           if(fc&&fc.length<40){(inUnavail?unavail:onDeck).push(fc)}
           continue;
         }
-
         const g=k=>{const idx=cm[k];return idx!==undefined&&idx<row.length?String(row[idx]||'').replace(/\xa0/g,' ').trim():''};
         const fn=g('fn'),ln=g('ln');
         if(!fn&&!ln)continue;
-
-        // Address: clean newlines/semicolons for display
         const addrRaw=g('addr').replace(/\\n/g,', ').replace(/\n/g,', ').replace(/;\s*/g,', ').replace(/,\s*,/g,',').replace(/,\s*$/,'').trim();
         const city=g('city'),state=g('state');
         const zipVal=cm.zip!==undefined&&cm.zip<row.length?String(row[cm.zip]||'').trim():'';
@@ -593,105 +461,188 @@ function processExcel(file){
         const pf=g('pf'),pl=g('pl'),pp=g('pp').replace(/\\n/g,'\n'),pe=g('pe');
         let team=g('dea').replace(/^Deacons?\s*/i,'').replace(/[Mm]arshell/g,'Marshall').trim()||'Unassigned';
         const notes=g('notes');
-
-        // Full display address
         const fullAddress=[addrRaw,city,[state,zipVal].filter(Boolean).join(' ')].filter(Boolean).join(', ');
-
         members.push({firstName:fn,lastName:ln,fullAddress,phone,pocFirst:pf,pocLast:pl,pocPhone:pp,pocEmail:pe,deaconTeam:team,notes});
       }
 
-      if(!members.length){alert('No member data found.');showProc(false);return}
-      renderResults(members,svc,onDeck,unavail);
-    }catch(err){console.error(err);alert('Error: '+err.message);showProc(false)}
-  };reader.readAsArrayBuffer(file);
-}
-
-// ===== IMAGE OCR =====
-function processImage(file){
-  const reader=new FileReader();
-  reader.onload=async function(e){
-    try{
-      document.getElementById('procTxt').textContent='Running OCR…';
-      const{data:{text}}=await Tesseract.recognize(e.target.result,'eng',{logger:m=>{if(m.status==='recognizing text')document.getElementById('procTxt').textContent=`Recognizing… ${Math.round((m.progress||0)*100)}%`}});
-      const lines=text.split('\n').map(l=>l.trim()).filter(Boolean);
-      const members=[];let started=false;
-      for(const line of lines){
-        if(/first\s*name|last\s*name|deacon/i.test(line)){started=true;continue}
-        if(!started)continue;if(/deacon\s*teams?\s*on\s*deck|unavailable/i.test(line))break;
-        if(line.length<10)continue;
-        const p=line.split(/\t|\s{2,}/).map(s=>s.trim()).filter(Boolean);
-        if(p.length<3)continue;
-        let dt=p.slice(-2).join(' ').replace(/^Deacons?\s*/i,'').replace(/[Mm]arshell/g,'Marshall').trim()||'Unassigned';
-        const fa=[p[2],p[3],p[4],p[5]].filter(Boolean).join(', ');
-        members.push({firstName:p[0]||'',lastName:p[1]||'',fullAddress:fa,phone:p[6]||'',pocFirst:'',pocLast:'',pocPhone:'',pocEmail:'',deaconTeam:dt,notes:''});
+      if(!members.length){
+        showProc(false);
+        notice('No member rows were found in that file. Make sure you picked this month’s communion list.','error');
+        return;
       }
-      if(!members.length){alert('Could not parse image. Try Excel.');showProc(false);return}
-      renderResults(members,'',[],[]);
-    }catch(err){console.error(err);alert('OCR error: '+err.message);showProc(false)}
-  };reader.readAsDataURL(file);
+      _pending={members,svcDate:svc,onDeck:onDeck,unavail:unavail,fileName:file.name};
+      showProc(false);
+      openReview();
+    }catch(err){
+      console.error(err);
+      showProc(false);
+      notice('Something went wrong reading that file. Try again, or call Deacon Granger for help. ('+err.message+')','error');
+    }
+  };
+  reader.readAsArrayBuffer(file);
 }
 
-// ===== RENDER =====
-let _lastData=null,_listId=null;
-function renderResults(members,svcDate,onDeck,unavail){
-  _lastData={members,svcDate,onDeck,unavail};
-  if(svcDate)document.getElementById('heroDate').textContent=svcDate;
-
-  // If loaded via ?list=ID, keep the short URL; otherwise encode into hash
-  if(_listId){
-    history.replaceState(null,'',location.pathname+'?list='+_listId);
-  }else{
-    try{
-      const payload=JSON.stringify(_lastData);
-      const encoded=btoa(unescape(encodeURIComponent(payload)));
-      history.replaceState(null,'',location.pathname+'#data='+encoded);
-    }catch(e){console.warn('Share encode error',e)}
+// ---------- Review step ----------
+function detectMonth(){
+  // 1) service date inside the sheet, 2) file name, 3) today
+  if(_pending&&_pending.svcDate){
+    const m=_pending.svcDate.match(/january|february|march|april|may|june|july|august|september|october|november|december/i);
+    const y=_pending.svcDate.match(/20\d{2}/);
+    if(m&&y)return{mi:MONTH_NAMES.findIndex(n=>n.toLowerCase()===m[0].toLowerCase()),yr:parseInt(y[0])};
   }
+  if(_pending&&_pending.fileName){
+    const f=_pending.fileName.toLowerCase().match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*(20\d{2})/);
+    if(f)return{mi:MONTHS.indexOf(f[1]),yr:parseInt(f[2])};
+  }
+  const now=new Date();
+  return{mi:now.getMonth(),yr:now.getFullYear()};
+}
+function openReview(){
+  const teams=new Set(_pending.members.map(m=>m.deaconTeam));
+  document.getElementById('rvDate').textContent=_pending.svcDate||'Not found in the file';
+  document.getElementById('rvMembers').textContent=_pending.members.length;
+  document.getElementById('rvTeams').textContent=teams.size;
 
+  const det=detectMonth();
+  const ms=document.getElementById('rvMonth'),ys=document.getElementById('rvYear');
+  ms.innerHTML=MONTH_NAMES.map((n,i)=>`<option value="${i}"${i===det.mi?' selected':''}>${n}</option>`).join('');
+  const thisYr=new Date().getFullYear();
+  let yopts='';
+  for(let y=thisYr-1;y<=thisYr+1;y++)yopts+=`<option value="${y}"${y===det.yr?' selected':''}>${y}</option>`;
+  ys.innerHTML=yopts;
+
+  document.getElementById('passInput').value=localStorage.getItem('nsbc_code')||'';
+  const err=document.getElementById('pubError');
+  err.classList.remove('show');
+  showView('review');
+}
+function pendingId(){
+  return MONTHS[parseInt(document.getElementById('rvMonth').value)]+document.getElementById('rvYear').value;
+}
+function previewParsed(){
+  renderResults(_pending.members,_pending.svcDate,_pending.onDeck,_pending.unavail,{preview:true});
+  showView('viewer');
+}
+
+// ---------- Publish ----------
+async function publishList(){
+  const err=document.getElementById('pubError');
+  err.classList.remove('show');
+  if(!PUBLISH_ENDPOINT){
+    err.textContent='Online posting is still being set up. For now, send the Excel file to Deacon Granger and he will post it.';
+    err.classList.add('show');
+    return;
+  }
+  const code=document.getElementById('passInput').value.trim();
+  if(!code){
+    err.textContent='Please enter the ministry code first.';
+    err.classList.add('show');
+    return;
+  }
+  const id=pendingId();
+  const btn=document.getElementById('publishBtn');
+  btn.disabled=true;btn.textContent='Posting…';
+  try{
+    const res=await fetch(PUBLISH_ENDPOINT,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({code,id,data:{members:_pending.members,svcDate:_pending.svcDate,onDeck:_pending.onDeck,unavail:_pending.unavail}})
+    });
+    const out=await res.json().catch(()=>({}));
+    if(res.status===401){throw new Error('That ministry code is not right. Check it and try again.')}
+    if(!res.ok||!out.ok){throw new Error(out.error||'The list could not be posted. Try again in a minute.')}
+    localStorage.setItem('nsbc_code',code);
+    _publishedId=id;
+    _publishedUrl=out.url||(SITE_URL+'?list='+id);
+    openShare();
+  }catch(e){
+    err.textContent=(e instanceof TypeError)?'Could not reach the posting service. Check your internet connection and try again.':e.message;
+    err.classList.add('show');
+  }finally{
+    btn.disabled=false;
+    btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Post the list &amp; get the link';
+  }
+}
+function openShare(){
+  const label=idToLabel(_publishedId);
+  document.getElementById('shareLink').textContent=_publishedUrl;
+  document.getElementById('shareSub').textContent='Send this link to the ministry. It opens the '+label+' list on any phone.';
+  const msg='NSBC Communion Delivery — '+label+': '+_publishedUrl;
+  document.getElementById('smsBtn').href='sms:?&body='+encodeURIComponent(msg);
+  document.getElementById('emailBtn').href='mailto:?subject='+encodeURIComponent('NSBC Communion Delivery — '+label)+'&body='+encodeURIComponent(msg);
+  showView('share');
+}
+function copyShareLink(){
+  navigator.clipboard.writeText(_publishedUrl).then(()=>toast('Link copied — ready to paste')).catch(()=>{
+    const r=document.createRange();r.selectNodeContents(document.getElementById('shareLink'));
+    const s=getSelection();s.removeAllRanges();s.addRange(r);
+    toast('Press and hold the link to copy it');
+  });
+}
+function viewPublished(){
+  _listId=_publishedId;
+  history.replaceState(null,'',location.pathname+'?list='+_publishedId);
+  renderResults(_pending.members,_pending.svcDate,_pending.onDeck,_pending.unavail);
+  showView('viewer');
+}
+
+// ---------- Viewer ----------
+function renderResults(members,svcDate,onDeck,unavail,opts){
+  opts=opts||{};
+  _lastData={members,svcDate,onDeck,unavail};
+  const hd=document.getElementById('heroDate');
+  if(svcDate){hd.textContent=svcDate;hd.style.display='inline-block'}else{hd.style.display='none'}
+
+  if(_listId&&!opts.preview)history.replaceState(null,'',location.pathname+'?list='+_listId);
+
+  // Merge team-name variants like "E. Hill" vs "E.Hill"
+  const normTeam=t=>t.replace(/\b([A-Z])\.\s+/g,'$1.').replace(/\s+/g,' ').trim();
   const grouped={};
-  members.forEach(m=>{if(!grouped[m.deaconTeam])grouped[m.deaconTeam]=[];grouped[m.deaconTeam].push(m)});
+  members.forEach(m=>{const t=normTeam(m.deaconTeam);if(!grouped[t])grouped[t]=[];grouped[t].push(m)});
   const teams=Object.keys(grouped).sort();
 
   let nav='<div class="nav-chip active" onclick="scrollToTeam(this,\'all\')">All <span class="cnt">'+members.length+'</span></div>';
-  teams.forEach(t=>{
-    const short=t.split(' and ')[0];
-    nav+=`<div class="nav-chip" onclick="scrollToTeam(this,'${esc(t)}')">${esc(short)} <span class="cnt">${grouped[t].length}</span></div>`;
+  const shorts=teams.map(t=>t.split(' and ')[0]);
+  teams.forEach((t,i)=>{
+    // If two teams share a first name (e.g. two "Nelson" teams), show the full team name
+    const label=shorts.filter(s=>s===shorts[i]).length>1?t:shorts[i];
+    nav+=`<div class="nav-chip" onclick="scrollToTeam(this,'${esc(t)}')">${esc(label)} <span class="cnt">${grouped[t].length}</span></div>`;
   });
   document.getElementById('dashNav').innerHTML=nav;
 
   let h='';
-  h+=`<div class="action-row">
-    <button class="abtn abtn-share" onclick="shareList()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share Dashboard</button>
-    <button class="abtn abtn-gold desk-only" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button>
-    <button class="abtn abtn-outline" onclick="exportJSON()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Save JSON</button>
-    <button class="abtn abtn-outline" onclick="resetUpload()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Upload New List</button>
-  </div>`;
+  h+=`<div class="action-row">`;
+  if(opts.preview){
+    h+=`<button class="btn btn-gold btn-sm" onclick="showView('review')">Looks right — go back and post it</button>
+        <button class="btn btn-outline btn-sm" onclick="startUpload()">Upload a different file</button>`;
+  }else{
+    h+=`<button class="btn btn-purple btn-sm" onclick="shareCurrent()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>
+        <button class="btn btn-gold btn-sm desk-only" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button>
+        <button class="btn btn-outline btn-sm" onclick="startUpload()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Post a new month</button>`;
+  }
+  h+=`</div>`;
 
-  h+=`<div class="summary"><div class="stat"><div class="n">${members.length}</div><div class="l">Members</div></div><div class="stat"><div class="n">${teams.length}</div><div class="l">Teams</div></div><div class="stat"><div class="n">${members.length}</div><div class="l">Visits</div></div></div>`;
+  h+=`<div class="summary"><div class="stat"><div class="n">${members.length}</div><div class="l">Members</div></div><div class="stat"><div class="n">${teams.length}</div><div class="l">Teams</div></div></div>`;
 
   teams.forEach(team=>{
     const tm=grouped[team];
     const tid=team.replace(/[^a-zA-Z0-9]/g,'_');
     h+=`<section class="team" id="team_${tid}"><div class="team-hdr"><div class="team-ico">✟</div><div class="team-nm">Dcns. ${esc(team)} <span class="vc">${tm.length} visit${tm.length!==1?'s':''}</span></div></div>`;
-
     tm.forEach(m=>{
       const name=esc(`${m.firstName} ${m.lastName}`);
       const mapLink=mapsUrl(m.fullAddress);
       const phones=extractPhones(m.phone);
       const pocPhones=extractPhones(m.pocPhone);
       const pn=[m.pocFirst,m.pocLast].filter(Boolean).join(' ');
-
       let phoneHtml=m.phone?`<p>${esc(m.phone)}</p>`:'<p>—</p>';
       if(phones.length)phoneHtml+=`<div class="tap-row">${phones.map(p=>`<a class="tap-btn tap-call" href="tel:${p}">${PHN} ${fmtPhone(p)}</a>`).join('')}</div>`;
-
       let pocHtml='';
       if(pn||m.pocPhone){
-        pocHtml+=`<label style="margin-top:.4rem">Point of Contact</label>`;
+        pocHtml+=`<label style="margin-top:.5rem">Point of Contact</label>`;
         if(pn)pocHtml+=`<p><span class="poc">${esc(pn)}</span></p>`;
         if(m.pocPhone)pocHtml+=`<p>${esc(m.pocPhone)}</p>`;
         if(pocPhones.length)pocHtml+=`<div class="tap-row">${pocPhones.map(p=>`<a class="tap-btn tap-call" href="tel:${p}">${PHN} ${fmtPhone(p)}</a>`).join('')}</div>`;
       }
-
       h+=`<div class="card">
         <div class="card-top"><div class="card-name">${name}</div>${m.notes?`<div class="card-badge">${esc(m.notes)}</div>`:''}</div>
         <div class="card-grid">
@@ -704,17 +655,16 @@ function renderResults(members,svcDate,onDeck,unavail){
   });
 
   if(onDeck.length||unavail.length){
-    h+=`<section class="ondeck"><div class="ondeck-hdr"><span style="font-size:.95rem">⏳</span><h2>Deacon Teams On Deck</h2></div>`;
+    h+=`<section class="ondeck"><div class="ondeck-hdr"><span style="font-size:1.05rem">⏳</span><h2>Deacon Teams On Deck</h2></div>`;
     if(onDeck.length)h+=`<div class="dk-sub"><div class="dk-lbl on">On Deck</div><div class="chips">${onDeck.map(n=>`<span class="chip chip-on">${esc(n)}</span>`).join('')}</div></div>`;
     if(unavail.length)h+=`<div class="dk-sub"><div class="dk-lbl off">Unavailable</div><div class="chips">${unavail.map(n=>`<span class="chip chip-off">${esc(n)}</span>`).join('')}</div></div>`;
     h+=`</section>`;
   }
 
-  h+=`<footer class="foot"><p>Please contact the church office with any questions or updates.</p><a href="https://newsalemcares.com" target="_blank">newsalemcares.com</a></footer>`;
+  h+=`<footer class="foot"><p>Please contact the church office with any questions or updates.</p><a href="https://newsalemcares.com" target="_blank" rel="noopener">newsalemcares.com</a>
+      <span class="foot-adv"><a onclick="downloadBackup()">Download a backup of this list</a></span></footer>`;
 
   document.getElementById('mainContent').innerHTML=h;
-  document.getElementById('results').style.display='block';
-  document.getElementById('uploadZone').style.display='none';
 }
 
 function scrollToTeam(chip,id){
@@ -725,70 +675,103 @@ function scrollToTeam(chip,id){
   if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function shareList(){
-  const url=window.location.href;
+function shareCurrent(){
+  const url=_listId?(SITE_URL+'?list='+_listId):location.href;
   const title='NSBC Communion Delivery';
-  const text=(document.getElementById('heroDate').textContent||'')+' — '+title;
+  const text=(_lastData&&_lastData.svcDate?_lastData.svcDate+' — ':'')+title;
   if(navigator.share){navigator.share({title,text,url}).catch(()=>{})}
-  else{navigator.clipboard.writeText(url).then(()=>toast('Dashboard link copied!')).catch(()=>alert('Copy this link:\n'+url))}
+  else{navigator.clipboard.writeText(url).then(()=>toast('Link copied — ready to paste')).catch(()=>toast('Could not copy — the address bar has the link'))}
 }
 
-function resetUpload(){
-  document.getElementById('results').style.display='none';
-  document.getElementById('uploadZone').style.display='';
-  uploadBox.style.display='';
-  document.getElementById('processing').classList.remove('active');
-  fileInput.value='';
-  history.replaceState(null,'',location.pathname);
-}
-
-function exportJSON(){
-  if(!_lastData){alert('No data to export.');return}
-  const name=prompt('Enter a short list ID (e.g. dec2025, jan2026):','');
-  if(!name)return;
-  const safeId=name.replace(/[^a-zA-Z0-9_-]/g,'');
+function downloadBackup(){
+  if(!_lastData)return;
+  const id=_listId||'communion-list';
   const blob=new Blob([JSON.stringify(_lastData,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=safeId+'.json';a.click();
-  toast('Saved '+safeId+'.json — add it to lists/ folder and push to GitHub');
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=id+'.json';a.click();
+  toast('Backup saved to your downloads');
 }
 
-function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+// ---------- Loading published lists ----------
+function idToLabel(id){
+  const m=id.match(/^([a-z]{3})(\d{4})$/);
+  if(!m)return id;
+  const mi=MONTHS.indexOf(m[1]);
+  return mi>=0?MONTH_NAMES[mi]+' '+m[2]:id;
+}
+function idToKey(id){
+  const m=id.match(/^([a-z]{3})(\d{4})$/);
+  if(!m)return null;
+  const mi=MONTHS.indexOf(m[1]);
+  return mi>=0?parseInt(m[2])*12+mi:null;
+}
+async function fetchList(id){
+  const r=await fetch('lists/'+id+'.json',{cache:'no-store'});
+  if(!r.ok)throw new Error('not found');
+  return r.json();
+}
+async function loadPublished(id,opts){
+  opts=opts||{};
+  try{
+    const data=await fetchList(id);
+    if(!(data&&data.members&&data.members.length))throw new Error('empty');
+    _listId=id;
+    renderResults(data.members,data.svcDate||'',data.onDeck||[],data.unavail||[]);
+    showView('viewer');
+    if(opts.fallbackNote)notice(opts.fallbackNote);
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+async function loadBest(){
+  const now=new Date();
+  const currentId=MONTHS[now.getMonth()]+now.getFullYear();
+  // Manifest lets us fall back to the newest posted list
+  let ids=[];
+  try{
+    const mf=await(await fetch('lists/manifest.json',{cache:'no-store'})).json();
+    ids=(mf.lists||[]).filter(id=>idToKey(id)!==null);
+  }catch(e){/* manifest missing — fall through */}
 
-function toggleReadme(){
-  const body=document.getElementById('readmeBody');
-  const toggle=document.getElementById('readmeToggle');
-  body.classList.toggle('open');
-  toggle.classList.toggle('open');
+  if(await loadPublished(currentId))return;
+
+  const nowKey=now.getFullYear()*12+now.getMonth();
+  const sorted=ids.filter(id=>idToKey(id)<=nowKey&&id!==currentId).sort((a,b)=>idToKey(b)-idToKey(a));
+  for(const id of sorted){
+    if(await loadPublished(id,{fallbackNote:idToLabel(currentId)+"'s list hasn't been posted yet — showing "+idToLabel(id)+'.'}))return;
+  }
+  // Nothing published at all
+  notice('No list is posted yet. If you have this month’s spreadsheet, upload it below.');
+  showView('upload');
 }
 
-// Load from ?list=ID (short link) or #data= (legacy inline link)
+// ---------- Start ----------
 (function(){
   const params=new URLSearchParams(location.search);
   const listId=params.get('list');
   if(listId){
-    // Fetch hosted JSON file
-    const safeId=listId.replace(/[^a-zA-Z0-9_-]/g,'');
-    showProc(true,'Loading list…');
-    document.getElementById('uploadZone').querySelector('.upload-box').style.display='none';
-    fetch('lists/'+safeId+'.json')
-      .then(r=>{if(!r.ok)throw new Error('List not found: '+safeId);return r.json()})
-      .then(data=>{
-        if(data&&data.members&&data.members.length){
-          _listId=safeId;
-          renderResults(data.members,data.svcDate||'',data.onDeck||[],data.unavail||[]);
-        }else{alert('List is empty.');showProc(false);document.getElementById('uploadZone').querySelector('.upload-box').style.display=''}
-      })
-      .catch(e=>{console.error(e);alert('Could not load list "'+safeId+'". Make sure lists/'+safeId+'.json exists.');showProc(false);document.getElementById('uploadZone').querySelector('.upload-box').style.display=''});
+    const clean=listId.replace(/[^a-zA-Z0-9_-]/g,'');
+    loadPublished(clean).then(ok=>{
+      if(!ok){
+        notice('The list "'+idToLabel(clean)+'" could not be found. Showing the newest one instead.','error');
+        loadBest();
+      }
+    });
     return;
   }
-  // Legacy: load from URL hash
-  const hash=location.hash;
-  if(!hash||!hash.startsWith('#data='))return;
-  try{
-    const json=decodeURIComponent(escape(atob(hash.slice(6))));
-    const data=JSON.parse(json);
-    if(data&&data.members&&data.members.length)renderResults(data.members,data.svcDate||'',data.onDeck||[],data.unavail||[]);
-  }catch(e){console.warn('Could not load shared data',e)}
+  if(location.hash&&location.hash.startsWith('#data=')){
+    // Old-style long links keep working
+    try{
+      const json=decodeURIComponent(escape(atob(location.hash.slice(6))));
+      const data=JSON.parse(json);
+      if(data&&data.members&&data.members.length){
+        renderResults(data.members,data.svcDate||'',data.onDeck||[],data.unavail||[]);
+        showView('viewer');
+        return;
+      }
+    }catch(e){console.warn('Could not load shared data',e)}
+  }
+  loadBest();
 })();
 </script>
 </body>
