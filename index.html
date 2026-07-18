@@ -320,7 +320,7 @@ body{font-family:'DM Sans',sans-serif;font-size:17px;background:var(--bg);color:
 // button explains that online posting is not switched on yet.
 // (localStorage override lets us test against a staging endpoint
 // without editing the live page.)
-const PUBLISH_ENDPOINT=localStorage.getItem('nsbc_endpoint_override')||'';
+const PUBLISH_ENDPOINT=localStorage.getItem('nsbc_endpoint_override')||'https://nsbc-publish.hiddenculture.workers.dev/';
 const SITE_URL=location.origin+location.pathname.replace(/index\.html$/,'');
 
 const MONTHS=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
