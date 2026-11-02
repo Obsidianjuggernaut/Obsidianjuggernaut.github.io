@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#2a1648">
+<meta name="description" content="New Salem Baptist Church Communion Delivery Dashboard">
+<title>NSBC Communion Delivery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --purple-deep:#2a1648;--purple-dark:#3b2060;--purple:#4e2d78;--purple-mid:#6a3f9e;
+  --purple-light:#a37fd4;--purple-soft:#bb99e4;--purple-wash:rgba(78,45,120,.14);
+  --purple-glow:rgba(106,63,158,.25);
+  --gold:#dfb254;--gold-bright:#f0d47a;--gold-dim:#b48e30;
+  --gold-pale:rgba(223,178,84,.12);--gold-ring:rgba(223,178,84,.35);
+  --bg:#160e24;--bg-el:#1e1432;--bg-card:#241943;--bg-card-h:#2c1f50;
+  --border:#3d2e63;--border-s:#32224f;
+  --text:#f2edfa;--text-mid:#d3c8e6;--text-dim:#a99bc4;
+  --red:#f07575;--green:#5cd67f;--blue:#8cc3f7;--ph-green:#4fd66e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;font-size:17px;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100dvh;overflow-x:hidden}
+
+/* ===== Hero ===== */
+.cross-hero{background:linear-gradient(175deg,var(--purple-deep),var(--purple-dark) 45%,var(--purple));position:relative;overflow:hidden;padding:1.75rem 1.25rem 1.5rem;text-align:center;border-bottom:3px solid var(--gold)}
+.cross-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 400px 180px at 50% 100%,rgba(212,168,67,.07),transparent 70%),radial-gradient(ellipse 250px 200px at 15% 20%,rgba(142,96,196,.12),transparent 60%),radial-gradient(ellipse 250px 200px at 85% 20%,rgba(142,96,196,.08),transparent 60%);pointer-events:none}
+.cross-w{margin:0 auto .6rem;position:relative;width:46px;height:64px}
+.cross-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,67,.18),transparent 70%)}
+.hero-church{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(1.5rem,5vw,2.1rem);color:var(--text);letter-spacing:.02em;margin-bottom:.05rem}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(1rem,3vw,1.25rem);color:var(--gold-bright);letter-spacing:.16em;text-transform:uppercase;margin-bottom:.5rem}
+.hero-addr{font-size:.9rem;color:var(--text-dim);letter-spacing:.03em;margin-bottom:.6rem}
+.hero-date{display:inline-block;padding:.4rem 1.4rem;border:1px solid var(--gold-ring);border-radius:100px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.05rem;color:var(--gold-bright);background:var(--gold-pale)}
+
+/* ===== Shared UI ===== */
+.main{max-width:720px;margin:0 auto;padding:0 .9rem 7rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:52px;padding:.8rem 1.5rem;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:1.02rem;font-weight:700;cursor:pointer;border:none;transition:all .2s;text-decoration:none;line-height:1.2}
+.btn svg{width:20px;height:20px;flex-shrink:0}
+.btn-gold{background:linear-gradient(135deg,var(--gold-dim),var(--gold));color:var(--purple-deep)}
+.btn-gold:hover{background:linear-gradient(135deg,var(--gold),var(--gold-bright))}
+.btn-purple{background:linear-gradient(135deg,var(--purple),var(--purple-mid));color:#fff}
+.btn-purple:hover{background:linear-gradient(135deg,var(--purple-mid),var(--purple-light))}
+.btn-outline{background:transparent;border:2px solid var(--border);color:var(--text-mid)}
+.btn-outline:hover{border-color:var(--purple-light);color:var(--purple-soft)}
+.btn-block{display:flex;width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-sm{min-height:44px;padding:.55rem 1.1rem;font-size:.95rem;font-weight:600}
+
+.notice{max-width:640px;margin:1rem auto;padding:1rem 1.2rem;border-radius:12px;font-size:1rem;line-height:1.55;display:none}
+.notice.show{display:block}
+.notice-info{background:var(--gold-pale);border:1px solid var(--gold-ring);color:var(--gold-bright)}
+.notice-error{background:rgba(240,117,117,.1);border:1px solid rgba(240,117,117,.3);color:var(--red)}
+
+.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--purple-dark);color:var(--gold-bright);padding:.8rem 1.5rem;border-radius:12px;font-size:1rem;font-weight:600;border:1px solid var(--gold-ring);opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== Steps indicator ===== */
+.steps{display:flex;justify-content:center;gap:.4rem;padding:1.5rem 1rem .5rem;align-items:center}
+.step{display:flex;align-items:center;gap:.5rem}
+.step-dot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.05rem;background:var(--bg-card);border:2px solid var(--border);color:var(--text-dim);transition:all .3s}
+.step.active .step-dot{background:var(--gold);border-color:var(--gold);color:var(--purple-deep)}
+.step.done .step-dot{background:var(--purple-mid);border-color:var(--purple-mid);color:#fff}
+.step-lbl{font-size:.95rem;font-weight:600;color:var(--text-dim)}
+.step.active .step-lbl{color:var(--gold-bright)}
+.step.done .step-lbl{color:var(--purple-soft)}
+.step-line{width:28px;height:2px;background:var(--border);margin:0 .2rem}
+@media(max-width:480px){.step-lbl{display:none}.step.active .step-lbl{display:inline}}
+
+/* ===== Upload view ===== */
+.upload-zone{max-width:640px;margin:1rem auto;padding:0 1rem}
+.upload-box{border:2px dashed var(--border);border-radius:18px;padding:2.5rem 1.5rem;text-align:center;background:var(--bg-card);transition:all .3s;cursor:pointer;position:relative}
+.upload-box:hover,.upload-box.drag-over{border-color:var(--gold);background:rgba(212,168,67,.04)}
+.upload-box input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.u-ico{width:64px;height:64px;margin:0 auto .8rem;border-radius:14px;background:var(--purple-wash);border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.u-ico svg{width:32px;height:32px;color:var(--gold)}
+.u-title{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.4rem;color:var(--text);margin-bottom:.4rem}
+.u-desc{font-size:1rem;color:var(--text-mid);margin-bottom:1rem;line-height:1.6}
+.u-fmts{display:flex;justify-content:center;gap:.4rem;flex-wrap:wrap}
+.u-fmt{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.25rem .65rem;border-radius:6px;background:var(--purple-wash);color:var(--purple-soft);border:1px solid rgba(106,63,158,.2)}
+.u-alt{text-align:center;margin-top:1rem}
+.u-alt a{font-size:.92rem;color:var(--text-dim);text-decoration:underline;cursor:pointer}
+.proc{display:none;text-align:center;padding:2.5rem 1rem}.proc.active{display:block}
+.spin{width:44px;height:44px;border:4px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:sp .8s linear infinite;margin:0 auto .8rem}
+@keyframes sp{to{transform:rotate(360deg)}}
+.proc-txt{font-size:1.05rem;color:var(--text-mid)}
+
+/* ===== Review view ===== */
+.review-wrap{max-width:640px;margin:0 auto;padding:0 1rem}
+.review-sum{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.4rem;margin-bottom:1rem}
+.review-sum h2{font-family:'Cormorant Garamond',serif;font-size:1.35rem;color:var(--gold-bright);margin-bottom:.8rem}
+.rv-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border-s);font-size:1.02rem;gap:.8rem;flex-wrap:wrap}
+.rv-row:last-child{border-bottom:none}
+.rv-row .k{color:var(--text-dim)}
+.rv-row .v{color:var(--text);font-weight:600;text-align:right}
+.month-pick{display:flex;gap:.6rem;margin-top:.2rem}
+.month-pick select{min-height:52px;padding:.6rem .8rem;border-radius:10px;background:var(--bg-el);border:2px solid var(--border);color:var(--text);font-size:1.02rem;font-family:'DM Sans',sans-serif}
+.pass-field{margin:1rem 0}
+.pass-field label{display:block;font-size:.95rem;font-weight:600;color:var(--text-mid);margin-bottom:.4rem}
+.pass-field input{width:100%;min-height:52px;padding:.6rem 1rem;border-radius:10px;background:var(--bg-el);border:2px solid var(--border);color:var(--text);font-size:1.1rem;letter-spacing:.1em}
+.pass-field input:focus{outline:none;border-color:var(--gold)}
+.pass-hint{font-size:.88rem;color:var(--text-dim);margin-top:.35rem}
+.review-actions{display:flex;flex-direction:column;gap:.7rem;margin:1.2rem 0}
+
+/* ===== Share view ===== */
+.share-wrap{max-width:640px;margin:0 auto;padding:0 1rem 3rem;text-align:center}
+.share-check{width:72px;height:72px;margin:1.5rem auto 1rem;border-radius:50%;background:rgba(92,214,127,.12);border:2px solid rgba(92,214,127,.4);display:flex;align-items:center;justify-content:center}
+.share-check svg{width:36px;height:36px;color:var(--green)}
+.share-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
+.share-sub{font-size:1.02rem;color:var(--text-mid);margin-bottom:1.3rem}
+.link-box{background:var(--bg-card);border:2px solid var(--gold-ring);border-radius:14px;padding:1.1rem 1.2rem;font-size:1.05rem;color:var(--gold-bright);word-break:break-all;margin-bottom:1.2rem;font-weight:600}
+.share-btns{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.5rem}
+
+/* ===== Viewer ===== */
+.dash-nav{display:flex;gap:.5rem;padding:.85rem 1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:var(--bg-el);border-bottom:1px solid var(--border-s);position:sticky;top:0;z-index:100}
+.dash-nav::-webkit-scrollbar{display:none}
+.nav-chip{flex-shrink:0;display:flex;align-items:center;gap:.4rem;min-height:44px;padding:.55rem 1.05rem;border-radius:100px;font-size:.95rem;font-weight:600;border:1px solid var(--border);color:var(--text-dim);background:transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+.nav-chip:hover,.nav-chip.active{border-color:var(--gold);color:var(--gold-bright);background:var(--gold-pale)}
+.nav-chip .cnt{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;border-radius:12px;font-size:.8rem;font-weight:700;background:var(--purple-glow);color:var(--purple-soft);padding:0 .3rem}
+.nav-chip.active .cnt{background:var(--gold-pale);color:var(--gold-bright)}
+
+.action-row{display:flex;gap:.6rem;padding:1rem 0;justify-content:center;flex-wrap:wrap}
+.summary{display:flex;justify-content:center;gap:2.2rem;padding:.75rem 0 1rem;border-bottom:1px solid var(--border-s);margin-bottom:1.4rem;flex-wrap:wrap}
+.stat{text-align:center}
+.stat .n{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--gold-bright);line-height:1.1}
+.stat .l{font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim)}
+
+.team{margin-bottom:1.75rem;scroll-margin-top:70px}
+.team-hdr{display:flex;align-items:center;gap:.7rem;margin-bottom:.6rem;padding-bottom:.5rem;border-bottom:1px solid var(--border-s)}
+.team-ico{width:42px;height:42px;background:linear-gradient(135deg,var(--purple-dark),var(--purple-mid));border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold-bright);font-size:1.05rem;flex-shrink:0;box-shadow:0 2px 8px rgba(78,45,120,.35)}
+.team-nm{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.3rem;color:var(--text)}
+.team-nm .vc{font-weight:400;color:var(--text-dim);font-family:'DM Sans',sans-serif;font-size:.9rem;margin-left:.45rem}
+
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.2rem 1.3rem;margin-bottom:.7rem;transition:border-color .2s,background .2s}
+.card:hover{border-color:var(--purple-glow);background:var(--bg-card-h)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.6rem;margin-bottom:.8rem;padding-bottom:.65rem;border-bottom:1px solid var(--border-s)}
+.card-name{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.3rem;color:var(--text);line-height:1.25}
+.card-badge{flex-shrink:0;font-size:.85rem;font-weight:600;color:var(--gold-bright);background:var(--gold-pale);border:1px solid rgba(212,168,67,.2);padding:.3rem .75rem;border-radius:100px;max-width:220px;text-align:right;line-height:1.35}
+.card-grid{display:grid;grid-template-columns:1fr;gap:.8rem}
+@media(min-width:480px){.card-grid{grid-template-columns:1fr 1fr;gap:.6rem 1.6rem}}
+.field label{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:.15rem}
+.field p{font-size:1rem;color:var(--text-mid);line-height:1.5;white-space:pre-line}
+.field .poc{font-weight:700;color:var(--text)}
+.tap-row{display:flex;gap:.45rem;margin-top:.45rem;flex-wrap:wrap}
+.tap-btn{display:inline-flex;align-items:center;gap:.35rem;min-height:44px;padding:.5rem .9rem;border-radius:10px;font-size:.92rem;font-weight:600;text-decoration:none;transition:all .15s;border:none;cursor:pointer}
+.tap-btn svg{width:17px;height:17px}
+.tap-nav{color:var(--blue);background:rgba(140,195,247,.1);border:1px solid rgba(140,195,247,.18)}
+.tap-nav:hover{background:rgba(140,195,247,.2)}
+.tap-call{color:var(--ph-green);background:rgba(79,214,110,.1);border:1px solid rgba(79,214,110,.18)}
+.tap-call:hover{background:rgba(79,214,110,.2)}
+
+.ondeck{margin-top:1.75rem;background:var(--gold-pale);border:1px solid rgba(212,168,67,.15);border-radius:16px;padding:1.2rem 1.3rem}
+.ondeck-hdr{display:flex;align-items:center;gap:.5rem;margin-bottom:.65rem}
+.ondeck-hdr h2{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.15rem;color:var(--gold-bright)}
+.dk-sub{margin-bottom:.6rem}.dk-sub:last-child{margin-bottom:0}
+.dk-lbl{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem}
+.dk-lbl.on{color:var(--purple-soft)}.dk-lbl.off{color:var(--red)}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap}
+.chip{font-size:.92rem;font-weight:500;padding:.3rem .75rem;border-radius:100px}
+.chip-on{color:var(--text-mid);background:var(--purple-wash);border:1px solid rgba(106,63,158,.22)}
+.chip-off{color:#f5a0a0;background:rgba(224,85,85,.09);border:1px solid rgba(224,85,85,.16)}
+
+.foot{text-align:center;padding:1.2rem .75rem;margin-top:.6rem;border-top:1px solid var(--border-s)}
+.foot p{font-size:.92rem;color:var(--text-dim);font-style:italic}
+.foot a{display:inline-block;margin-top:.35rem;font-size:.88rem;font-weight:600;color:var(--gold);text-decoration:none}
+.foot .foot-adv{display:block;margin-top:.6rem;font-size:.8rem;color:var(--text-dim);font-style:normal}
+.foot .foot-adv a{font-size:.8rem;color:var(--text-dim);text-decoration:underline;font-weight:400;margin:0 .3rem;cursor:pointer}
+
+.mob-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg-el);border-top:1px solid var(--border);padding:.6rem .75rem calc(.6rem + env(safe-area-inset-bottom));z-index:200;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.mob-bar-inner{display:flex;gap:.5rem;justify-content:center}
+.mob-bar .btn{flex:1;min-height:50px;padding:.6rem .5rem;font-size:.92rem}
+@media(max-width:640px){.card-top{flex-direction:column;gap:.35rem}.card-badge{text-align:left;max-width:100%}.summary{gap:1.4rem}.mob-bar{display:block}.action-row .desk-only{display:none}}
+@media(min-width:641px){.mob-bar{display:none}}
+
+@media print{body{background:#fff;color:#111}.cross-hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}.upload-zone,.action-row,.dash-nav,.mob-bar,.toast,.steps,.notice{display:none!important}.card{break-inside:avoid;border:1px solid #ccc;background:#fff}.card-name,.team-nm{color:#111}.field p{color:#333}.team{break-inside:avoid}.main{padding-bottom:1rem}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.team,.ondeck,.foot{opacity:0;animation:fadeUp .4s ease-out forwards}
+.team:nth-child(1){animation-delay:.1s}.team:nth-child(2){animation-delay:.15s}.team:nth-child(3){animation-delay:.2s}.team:nth-child(4){animation-delay:.25s}.team:nth-child(5){animation-delay:.3s}.team:nth-child(6){animation-delay:.35s}.team:nth-child(7){animation-delay:.4s}.team:nth-child(8){animation-delay:.45s}
+.ondeck{animation-delay:.5s}.foot{animation-delay:.55s}
+</style>
+</head>
+<body>
+
+<header class="cross-hero">
+  <div class="cross-w">
+    <div class="cross-glow"></div>
+    <svg width="46" height="64" viewBox="0 0 50 70" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:relative;z-index:1">
+      <defs><linearGradient id="cg" x1="25" y1="0" x2="25" y2="70" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ebc95e"/><stop offset="50%" stop-color="#d4a843"/><stop offset="100%" stop-color="#b48e30"/></linearGradient></defs>
+      <rect x="21" y="2" width="8" height="62" rx="2" fill="url(#cg)"/>
+      <rect x="7" y="16" width="36" height="8" rx="2" fill="url(#cg)"/>
+      <rect x="23.5" y="5" width="3" height="56" rx="1" fill="rgba(255,255,255,.15)"/>
+      <rect x="10" y="18.5" width="30" height="3" rx="1" fill="rgba(255,255,255,.15)"/>
+      <rect x="17" y="58" width="16" height="6" rx="1.5" fill="url(#cg)" opacity=".5"/>
+    </svg>
+  </div>
+  <div class="hero-church">New Salem Baptist Church</div>
+  <div class="hero-sub">Communion Delivery</div>
+  <div class="hero-addr">2956 Cleveland Avenue &nbsp;•&nbsp; Columbus, Ohio 43224 &nbsp;•&nbsp; (614) 267-2536</div>
+  <div class="hero-date" id="heroDate" style="display:none"></div>
+</header>
+
+<div class="notice" id="notice"></div>
+
+<!-- ===== VIEW: upload ===== -->
+<div id="viewUpload" style="display:none">
+  <div class="steps">
+    <div class="step active"><div class="step-dot">1</div><span class="step-lbl">Upload</span></div>
+    <div class="step-line"></div>
+    <div class="step"><div class="step-dot">2</div><span class="step-lbl">Check</span></div>
+    <div class="step-line"></div>
+    <div class="step"><div class="step-dot">3</div><span class="step-lbl">Share</span></div>
+  </div>
+  <div class="upload-zone" id="uploadZone">
+    <div class="upload-box" id="uploadBox">
+      <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" aria-label="Upload communion list spreadsheet">
+      <div class="u-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      <div class="u-title">Upload the communion list</div>
+      <div class="u-desc">Tap here to choose this month's Excel file,<br>or drag and drop it onto this box.</div>
+      <div class="u-fmts"><span class="u-fmt">.xlsx</span><span class="u-fmt">.xls</span><span class="u-fmt">.csv</span></div>
+    </div>
+    <div class="proc" id="processing"><div class="spin"></div><div class="proc-txt" id="procTxt">Reading spreadsheet…</div></div>
+    <div class="u-alt"><a onclick="backToViewer()">Back to the current list</a></div>
+  </div>
+</div>
+
+<!-- ===== VIEW: review ===== -->
+<div id="viewReview" style="display:none">
+  <div class="steps">
+    <div class="step done"><div class="step-dot">✓</div><span class="step-lbl">Upload</span></div>
+    <div class="step-line"></div>
+    <div class="step active"><div class="step-dot">2</div><span class="step-lbl">Check</span></div>
+    <div class="step-line"></div>
+    <div class="step"><div class="step-dot">3</div><span class="step-lbl">Share</span></div>
+  </div>
+  <div class="review-wrap">
+    <div class="review-sum">
+      <h2>Does this look right?</h2>
+      <div class="rv-row"><span class="k">Service date</span><span class="v" id="rvDate">—</span></div>
+      <div class="rv-row"><span class="k">Members to visit</span><span class="v" id="rvMembers">—</span></div>
+      <div class="rv-row"><span class="k">Deacon teams</span><span class="v" id="rvTeams">—</span></div>
+      <div class="rv-row" style="align-items:center"><span class="k">Posting for</span>
+        <span class="month-pick"><select id="rvMonth" aria-label="Month"></select><select id="rvYear" aria-label="Year"></select></span>
+      </div>
+    </div>
+    <div class="pass-field" id="passField">
+      <label for="passInput">Ministry code</label>
+      <input type="text" id="passInput" inputmode="text" autocomplete="off" placeholder="Enter the ministry code">
+      <div class="pass-hint">Ask Deacon Granger if you don't have the code. Your phone remembers it after the first time.</div>
+    </div>
+    <div class="review-actions">
+      <button class="btn btn-gold btn-block" id="publishBtn" onclick="publishList()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        Post the list &amp; get the link
+      </button>
+      <button class="btn btn-outline btn-block" onclick="previewParsed()">See the full list first</button>
+      <button class="btn btn-outline btn-block" onclick="startUpload()">Start over with a different file</button>
+    </div>
+    <div class="notice notice-error" id="pubError"></div>
+  </div>
+</div>
+
+<!-- ===== VIEW: share ===== -->
+<div id="viewShare" style="display:none">
+  <div class="steps">
+    <div class="step done"><div class="step-dot">✓</div><span class="step-lbl">Upload</span></div>
+    <div class="step-line"></div>
+    <div class="step done"><div class="step-dot">✓</div><span class="step-lbl">Check</span></div>
+    <div class="step-line"></div>
+    <div class="step active"><div class="step-dot">3</div><span class="step-lbl">Share</span></div>
+  </div>
+  <div class="share-wrap">
+    <div class="share-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <div class="share-title">The list is posted</div>
+    <div class="share-sub" id="shareSub">Send this link to the ministry. It opens the list on any phone.</div>
+    <div class="link-box" id="shareLink">…</div>
+    <div class="share-btns">
+      <button class="btn btn-gold btn-block" onclick="copyShareLink()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy the link
+      </button>
+      <a class="btn btn-purple btn-block" id="smsBtn" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        Text it
+      </a>
+      <a class="btn btn-purple btn-block" id="emailBtn" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email it
+      </a>
+      <button class="btn btn-outline btn-block" onclick="viewPublished()">See the finished list</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VIEW: viewer (the dashboard) ===== -->
+<div id="results" style="display:none">
+  <nav class="dash-nav" id="dashNav"></nav>
+  <div class="main" id="mainContent"></div>
+  <div class="mob-bar" id="mobBar"><div class="mob-bar-inner">
+    <button class="btn btn-purple" onclick="shareCurrent()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>
+    <button class="btn btn-gold" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button>
+  </div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+ * NSBC Communion Delivery — v2
+ * Deacon flow: Upload -> Check -> Share. Publishing goes through
+ * a Cloudflare Worker that saves the list to this site, so the
+ * share link is always short: ?list=jul2026
+ * ============================================================ */
+
+// Set after the Worker is deployed. While empty, the publish
+// button explains that online posting is not switched on yet.
+// (localStorage override lets us test against a staging endpoint
+// without editing the live page.)
+const PUBLISH_ENDPOINT=localStorage.getItem('nsbc_endpoint_override')||'https://nsbc-publish.hiddenculture.workers.dev/';
+const SITE_URL=location.origin+location.pathname.replace(/index\.html$/,'');
+
+const MONTHS=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+const MONTH_NAMES=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+const PIN=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
+const PHN=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`;
+
+let _lastData=null;   // data currently shown in the viewer
+let _pending=null;    // parsed upload awaiting review/publish
+let _listId=null;     // id of the published list being viewed
+let _publishedId=null,_publishedUrl=null;
+let _listKey=null,_publishedKey=null; // key for the open list; it lives only in the link, after the #
+
+// ---------- List encryption ----------
+// Lists are stored scrambled (AES-256-GCM). Each month has its own random key, carried in the
+// link after #k=. Browsers do not send that part to GitHub, so the site holds no readable list.
+// The scrambled text sits in onDeck because the publish Worker keeps only the known list fields.
+const ENC_TAG='nsbc-enc-1.';
+function isLocked(f){return !!(f&&Array.isArray(f.onDeck)&&typeof f.onDeck[0]==='string'&&f.onDeck[0].startsWith(ENC_TAG))}
+function b64u(bytes){return btoa(String.fromCharCode(...bytes)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function unb64u(str){return Uint8Array.from(atob(str.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0))}
+function aesKey(raw){return crypto.subtle.importKey('raw',raw,'AES-GCM',false,['encrypt','decrypt'])}
+async function encryptList(id,data){
+  const raw=crypto.getRandomValues(new Uint8Array(32)),iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:new TextEncoder().encode(id)},await aesKey(raw),new TextEncoder().encode(JSON.stringify(data)));
+  return {key:b64u(raw),file:{members:[{deaconTeam:'Locked'}],svcDate:'',onDeck:[ENC_TAG+b64u(iv)+'.'+b64u(new Uint8Array(ct))],unavail:[]}};
+}
+async function decryptList(id,file,key){
+  const [iv,ct]=file.onDeck[0].slice(ENC_TAG.length).split('.');
+  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64u(iv),additionalData:new TextEncoder().encode(id)},await aesKey(unb64u(key)),unb64u(ct));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+function linkKey(){const m=location.hash.match(/^#k=([A-Za-z0-9_-]{43})$/);return m?m[1]:null}
+function listPath(id){return location.pathname+'?list='+id+(_listKey?'#k='+_listKey:'')}
+
+// ---------- View switching ----------
+const VIEWS={upload:'viewUpload',review:'viewReview',share:'viewShare',viewer:'results'};
+function showView(name){
+  Object.values(VIEWS).forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById(VIEWS[name]).style.display='block';
+  document.getElementById('heroDate').style.display=(name==='viewer'&&_lastData&&_lastData.svcDate)?'inline-block':'none';
+  window.scrollTo({top:0});
+}
+function notice(msg,kind){
+  const n=document.getElementById('notice');
+  if(!msg){n.className='notice';n.textContent='';return}
+  n.className='notice show '+(kind==='error'?'notice-error':'notice-info');
+  n.textContent=msg;
+}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+
+// ---------- Upload handling ----------
+const uploadBox=document.getElementById('uploadBox'),fileInput=document.getElementById('fileInput');
+['dragenter','dragover'].forEach(e=>uploadBox.addEventListener(e,ev=>{ev.preventDefault();uploadBox.classList.add('drag-over')}));
+['dragleave','drop'].forEach(e=>uploadBox.addEventListener(e,ev=>{ev.preventDefault();uploadBox.classList.remove('drag-over')}));
+uploadBox.addEventListener('drop',ev=>{if(ev.dataTransfer.files[0])handleFile(ev.dataTransfer.files[0])});
+fileInput.addEventListener('change',ev=>{if(ev.target.files[0])handleFile(ev.target.files[0])});
+
+function startUpload(){
+  _pending=null;fileInput.value='';
+  showProc(false);notice('');
+  showView('upload');
+}
+function backToViewer(){
+  notice('');
+  if(_lastData){showView('viewer');return}
+  loadBest();
+}
+function handleFile(f){
+  const ext=f.name.split('.').pop().toLowerCase();
+  if(!['xlsx','xls','csv'].includes(ext)){
+    notice('That file type will not work. Please upload the Excel file (.xlsx) from the church office.','error');
+    return;
+  }
+  notice('');
+  showProc(true,'Reading spreadsheet…');
+  processExcel(f);
+}
+function showProc(s,t){document.getElementById('processing').classList.toggle('active',s);uploadBox.style.display=s?'none':'';if(t)document.getElementById('procTxt').textContent=t}
+
+// ---------- Column mapping (ordered rules; "Point of Contact
+// Email Address" must not collide with "Address") ----------
+function mapColumns(hdr){
+  const cm={};
+  hdr.forEach((h,i)=>{
+    const lo=h.toLowerCase().replace(/[\n\r]/g,' ').trim();
+    if(lo.includes('point of contact')||lo.includes('contact')){
+      if(lo.includes('first')){cm.pf=i;return}
+      if(lo.includes('last')){cm.pl=i;return}
+      if(lo.includes('phone')){cm.pp=i;return}
+      if(lo.includes('email')||lo.includes('address')){cm.pe=i;return}
+      return;
+    }
+    if(lo.includes('first name')){cm.fn=i;return}
+    if(lo.includes('last name')){cm.ln=i;return}
+    if(lo==='address'||lo.includes('address')&&!lo.includes('email')){cm.addr=i;return}
+    if(lo.includes('city')){cm.city=i;return}
+    if(lo.includes('state')){cm.state=i;return}
+    if(lo==='zip'||lo.includes('zip')){cm.zip=i;return}
+    if(lo.includes('phone')){cm.phone=i;return}
+    if(lo.includes('deacon')||lo.includes('team assigned')){cm.dea=i;return}
+    if(lo.includes('note')){cm.notes=i;return}
+  });
+  return cm;
+}
+function extractPhones(str){
+  if(!str)return[];
+  const m=str.match(/\(?\d{3}\)?[\s.\-]*\d{3}[\s.\-]*\d{4}/g);
+  return m?m.map(p=>p.replace(/[^\d]/g,'')):[];
+}
+function fmtPhone(d){return d.replace(/(\d{3})(\d{3})(\d{4})/,'($1) $2-$3')}
+function mapsUrl(addr){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(addr)}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+// ---------- Excel parsing ----------
+function processExcel(file){
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const R=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+
+      let svc='';
+      for(let i=0;i<Math.min(6,R.length);i++){
+        const v=String(R[i][0]||'');
+        if(/sunday|monday|tuesday|wednesday|thursday|friday|saturday/i.test(v)){svc=v.trim();break}
+      }
+
+      let hi=-1;
+      for(let i=0;i<Math.min(10,R.length);i++){
+        if(R[i].map(c=>String(c||'').toLowerCase()).join('|').includes('first name')){hi=i;break}
+      }
+      if(hi===-1){
+        showProc(false);
+        notice('This does not look like the communion list — the "First Name" row was not found. Make sure you picked the right file, or call Deacon Granger for help.','error');
+        return;
+      }
+
+      const cm=mapColumns(R[hi].map(h=>String(h||'')));
+      const members=[],onDeck=[],unavail=[];
+      let inDeck=false,inUnavail=false;
+
+      for(let i=hi+1;i<R.length;i++){
+        const row=R[i];
+        const fc=String(row[0]||'').trim();
+        if(/deacon\s*teams?\s*on\s*deck/i.test(fc)){inDeck=true;inUnavail=false;continue}
+        if(inDeck){
+          if(/unavailable/i.test(fc)){inUnavail=true;continue}
+          if(fc&&fc.length<40){(inUnavail?unavail:onDeck).push(fc)}
+          continue;
+        }
+        const g=k=>{const idx=cm[k];return idx!==undefined&&idx<row.length?String(row[idx]||'').replace(/\xa0/g,' ').trim():''};
+        const fn=g('fn'),ln=g('ln');
+        if(!fn&&!ln)continue;
+        const addrRaw=g('addr').replace(/\\n/g,', ').replace(/\n/g,', ').replace(/;\s*/g,', ').replace(/,\s*,/g,',').replace(/,\s*$/,'').trim();
+        const city=g('city'),state=g('state');
+        const zipVal=cm.zip!==undefined&&cm.zip<row.length?String(row[cm.zip]||'').trim():'';
+        const phone=g('phone').replace(/\\n/g,'\n');
+        const pf=g('pf'),pl=g('pl'),pp=g('pp').replace(/\\n/g,'\n'),pe=g('pe');
+        let team=g('dea').replace(/^Deacons?\s*/i,'').replace(/[Mm]arshell/g,'Marshall').trim()||'Unassigned';
+        const notes=g('notes');
+        const fullAddress=[addrRaw,city,[state,zipVal].filter(Boolean).join(' ')].filter(Boolean).join(', ');
+        members.push({firstName:fn,lastName:ln,fullAddress,phone,pocFirst:pf,pocLast:pl,pocPhone:pp,pocEmail:pe,deaconTeam:team,notes});
+      }
+
+      if(!members.length){
+        showProc(false);
+        notice('No member rows were found in that file. Make sure you picked this month’s communion list.','error');
+        return;
+      }
+      _pending={members,svcDate:svc,onDeck:onDeck,unavail:unavail,fileName:file.name};
+      showProc(false);
+      openReview();
+    }catch(err){
+      console.error(err);
+      showProc(false);
+      notice('Something went wrong reading that file. Try again, or call Deacon Granger for help. ('+err.message+')','error');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// ---------- Review step ----------
+function detectMonth(){
+  // 1) service date inside the sheet, 2) file name, 3) today
+  if(_pending&&_pending.svcDate){
+    const m=_pending.svcDate.match(/january|february|march|april|may|june|july|august|september|october|november|december/i);
+    const y=_pending.svcDate.match(/20\d{2}/);
+    if(m&&y)return{mi:MONTH_NAMES.findIndex(n=>n.toLowerCase()===m[0].toLowerCase()),yr:parseInt(y[0])};
+  }
+  if(_pending&&_pending.fileName){
+    const f=_pending.fileName.toLowerCase().match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*(20\d{2})/);
+    if(f)return{mi:MONTHS.indexOf(f[1]),yr:parseInt(f[2])};
+  }
+  const now=new Date();
+  return{mi:now.getMonth(),yr:now.getFullYear()};
+}
+function openReview(){
+  const teams=new Set(_pending.members.map(m=>m.deaconTeam));
+  document.getElementById('rvDate').textContent=_pending.svcDate||'Not found in the file';
+  document.getElementById('rvMembers').textContent=_pending.members.length;
+  document.getElementById('rvTeams').textContent=teams.size;
+
+  const det=detectMonth();
+  const ms=document.getElementById('rvMonth'),ys=document.getElementById('rvYear');
+  ms.innerHTML=MONTH_NAMES.map((n,i)=>`<option value="${i}"${i===det.mi?' selected':''}>${n}</option>`).join('');
+  const thisYr=new Date().getFullYear();
+  let yopts='';
+  for(let y=thisYr-1;y<=thisYr+1;y++)yopts+=`<option value="${y}"${y===det.yr?' selected':''}>${y}</option>`;
+  ys.innerHTML=yopts;
+
+  document.getElementById('passInput').value=localStorage.getItem('nsbc_code')||'';
+  const err=document.getElementById('pubError');
+  err.classList.remove('show');
+  showView('review');
+}
+function pendingId(){
+  return MONTHS[parseInt(document.getElementById('rvMonth').value)]+document.getElementById('rvYear').value;
+}
+function previewParsed(){
+  renderResults(_pending.members,_pending.svcDate,_pending.onDeck,_pending.unavail,{preview:true});
+  showView('viewer');
+}
+
+// ---------- Publish ----------
+async function publishList(){
+  const err=document.getElementById('pubError');
+  err.classList.remove('show');
+  if(!PUBLISH_ENDPOINT){
+    err.textContent='Online posting is still being set up. For now, send the Excel file to Deacon Granger and he will post it.';
+    err.classList.add('show');
+    return;
+  }
+  const code=document.getElementById('passInput').value.trim();
+  if(!code){
+    err.textContent='Please enter the ministry code first.';
+    err.classList.add('show');
+    return;
+  }
+  const id=pendingId();
+  const btn=document.getElementById('publishBtn');
+  btn.disabled=true;btn.textContent='Posting…';
+  try{
+    const locked=await encryptList(id,{members:_pending.members,svcDate:_pending.svcDate,onDeck:_pending.onDeck,unavail:_pending.unavail});
+    const res=await fetch(PUBLISH_ENDPOINT,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({code,id,data:locked.file})
+    });
+    const out=await res.json().catch(()=>({}));
+    if(res.status===401){throw new Error('That ministry code is not right. Check it and try again.')}
+    if(!res.ok||!out.ok){throw new Error(out.error||'The list could not be posted. Try again in a minute.')}
+    localStorage.setItem('nsbc_code',code);
+    _publishedId=id;
+    _publishedKey=locked.key;
+    _publishedUrl=(out.url||(SITE_URL+'?list='+id))+'#k='+locked.key;
+    openShare();
+  }catch(e){
+    err.textContent=(e instanceof TypeError)?'Could not reach the posting service. Check your internet connection and try again.':e.message;
+    err.classList.add('show');
+  }finally{
+    btn.disabled=false;
+    btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Post the list &amp; get the link';
+  }
+}
+function openShare(){
+  const label=idToLabel(_publishedId);
+  document.getElementById('shareLink').textContent=_publishedUrl;
+  document.getElementById('shareSub').textContent='Send this link to the ministry only. It opens the '+label+' list on any phone, and anyone who has it can read the list.';
+  const msg='NSBC Communion Delivery — '+label+': '+_publishedUrl;
+  document.getElementById('smsBtn').href='sms:?&body='+encodeURIComponent(msg);
+  document.getElementById('emailBtn').href='mailto:?subject='+encodeURIComponent('NSBC Communion Delivery — '+label)+'&body='+encodeURIComponent(msg);
+  showView('share');
+}
+function copyShareLink(){
+  navigator.clipboard.writeText(_publishedUrl).then(()=>toast('Link copied — ready to paste')).catch(()=>{
+    const r=document.createRange();r.selectNodeContents(document.getElementById('shareLink'));
+    const s=getSelection();s.removeAllRanges();s.addRange(r);
+    toast('Press and hold the link to copy it');
+  });
+}
+function viewPublished(){
+  _listId=_publishedId;_listKey=_publishedKey;
+  history.replaceState(null,'',listPath(_publishedId));
+  renderResults(_pending.members,_pending.svcDate,_pending.onDeck,_pending.unavail);
+  showView('viewer');
+}
+
+// ---------- Viewer ----------
+function renderResults(members,svcDate,onDeck,unavail,opts){
+  opts=opts||{};
+  _lastData={members,svcDate,onDeck,unavail};
+  const hd=document.getElementById('heroDate');
+  if(svcDate){hd.textContent=svcDate;hd.style.display='inline-block'}else{hd.style.display='none'}
+
+  if(_listId&&!opts.preview)history.replaceState(null,'',listPath(_listId));
+
+  // Merge team-name variants like "E. Hill" vs "E.Hill"
+  const normTeam=t=>t.replace(/\b([A-Z])\.\s+/g,'$1.').replace(/\s+/g,' ').trim();
+  const grouped={};
+  members.forEach(m=>{const t=normTeam(m.deaconTeam);if(!grouped[t])grouped[t]=[];grouped[t].push(m)});
+  const teams=Object.keys(grouped).sort();
+
+  let nav='<div class="nav-chip active" onclick="scrollToTeam(this,\'all\')">All <span class="cnt">'+members.length+'</span></div>';
+  const shorts=teams.map(t=>t.split(' and ')[0]);
+  teams.forEach((t,i)=>{
+    // If two teams share a first name (e.g. two "Nelson" teams), show the full team name
+    const label=shorts.filter(s=>s===shorts[i]).length>1?t:shorts[i];
+    nav+=`<div class="nav-chip" onclick="scrollToTeam(this,'${esc(t)}')">${esc(label)} <span class="cnt">${grouped[t].length}</span></div>`;
+  });
+  document.getElementById('dashNav').innerHTML=nav;
+
+  let h='';
+  h+=`<div class="action-row">`;
+  if(opts.preview){
+    h+=`<button class="btn btn-gold btn-sm" onclick="showView('review')">Looks right — go back and post it</button>
+        <button class="btn btn-outline btn-sm" onclick="startUpload()">Upload a different file</button>`;
+  }else{
+    h+=`<button class="btn btn-purple btn-sm" onclick="shareCurrent()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>
+        <button class="btn btn-gold btn-sm desk-only" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button>
+        <button class="btn btn-outline btn-sm" onclick="startUpload()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Post a new month</button>`;
+  }
+  h+=`</div>`;
+
+  h+=`<div class="summary"><div class="stat"><div class="n">${members.length}</div><div class="l">Members</div></div><div class="stat"><div class="n">${teams.length}</div><div class="l">Teams</div></div></div>`;
+
+  teams.forEach(team=>{
+    const tm=grouped[team];
+    const tid=team.replace(/[^a-zA-Z0-9]/g,'_');
+    h+=`<section class="team" id="team_${tid}"><div class="team-hdr"><div class="team-ico">✟</div><div class="team-nm">Dcns. ${esc(team)} <span class="vc">${tm.length} visit${tm.length!==1?'s':''}</span></div></div>`;
+    tm.forEach(m=>{
+      const name=esc(`${m.firstName} ${m.lastName}`);
+      const mapLink=mapsUrl(m.fullAddress);
+      const phones=extractPhones(m.phone);
+      const pocPhones=extractPhones(m.pocPhone);
+      const pn=[m.pocFirst,m.pocLast].filter(Boolean).join(' ');
+      let phoneHtml=m.phone?`<p>${esc(m.phone)}</p>`:'<p>—</p>';
+      if(phones.length)phoneHtml+=`<div class="tap-row">${phones.map(p=>`<a class="tap-btn tap-call" href="tel:${p}">${PHN} ${fmtPhone(p)}</a>`).join('')}</div>`;
+      let pocHtml='';
+      if(pn||m.pocPhone){
+        pocHtml+=`<label style="margin-top:.5rem">Point of Contact</label>`;
+        if(pn)pocHtml+=`<p><span class="poc">${esc(pn)}</span></p>`;
+        if(m.pocPhone)pocHtml+=`<p>${esc(m.pocPhone)}</p>`;
+        if(pocPhones.length)pocHtml+=`<div class="tap-row">${pocPhones.map(p=>`<a class="tap-btn tap-call" href="tel:${p}">${PHN} ${fmtPhone(p)}</a>`).join('')}</div>`;
+      }
+      h+=`<div class="card">
+        <div class="card-top"><div class="card-name">${name}</div>${m.notes?`<div class="card-badge">${esc(m.notes)}</div>`:''}</div>
+        <div class="card-grid">
+          <div class="field"><label>Address</label><p>${esc(m.fullAddress)}</p><div class="tap-row"><a class="tap-btn tap-nav" href="${mapLink}" target="_blank" rel="noopener">${PIN} Navigate</a></div></div>
+          <div class="field"><label>Phone</label>${phoneHtml}${pocHtml}</div>
+        </div>
+      </div>`;
+    });
+    h+=`</section>`;
+  });
+
+  if(onDeck.length||unavail.length){
+    h+=`<section class="ondeck"><div class="ondeck-hdr"><span style="font-size:1.05rem">⏳</span><h2>Deacon Teams On Deck</h2></div>`;
+    if(onDeck.length)h+=`<div class="dk-sub"><div class="dk-lbl on">On Deck</div><div class="chips">${onDeck.map(n=>`<span class="chip chip-on">${esc(n)}</span>`).join('')}</div></div>`;
+    if(unavail.length)h+=`<div class="dk-sub"><div class="dk-lbl off">Unavailable</div><div class="chips">${unavail.map(n=>`<span class="chip chip-off">${esc(n)}</span>`).join('')}</div></div>`;
+    h+=`</section>`;
+  }
+
+  h+=`<footer class="foot"><p>Please contact the church office with any questions or updates.</p><a href="https://newsalemcares.com" target="_blank" rel="noopener">newsalemcares.com</a>
+      <span class="foot-adv"><a onclick="downloadBackup()">Download a backup of this list</a><a href="https://github.com/Obsidianjuggernaut/Obsidianjuggernaut.github.io#readme" target="_blank" rel="noopener">How this works</a></span></footer>`;
+
+  document.getElementById('mainContent').innerHTML=h;
+}
+
+function scrollToTeam(chip,id){
+  document.querySelectorAll('.nav-chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  if(id==='all'){window.scrollTo({top:0,behavior:'smooth'});return}
+  const el=document.getElementById('team_'+id.replace(/[^a-zA-Z0-9]/g,'_'));
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function shareCurrent(){
+  const url=_listId?(SITE_URL+'?list='+_listId+(_listKey?'#k='+_listKey:'')):location.href;
+  const title='NSBC Communion Delivery';
+  const text=(_lastData&&_lastData.svcDate?_lastData.svcDate+' — ':'')+title;
+  if(navigator.share){navigator.share({title,text,url}).catch(()=>{})}
+  else{navigator.clipboard.writeText(url).then(()=>toast('Link copied — ready to paste')).catch(()=>toast('Could not copy — the address bar has the link'))}
+}
+
+function downloadBackup(){
+  if(!_lastData)return;
+  const id=_listId||'communion-list';
+  const blob=new Blob([JSON.stringify(_lastData,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=id+'.json';a.click();
+  toast('Backup saved to your downloads');
+}
+
+// ---------- Loading published lists ----------
+function idToLabel(id){
+  const m=id.match(/^([a-z]{3})(\d{4})$/);
+  if(!m)return id;
+  const mi=MONTHS.indexOf(m[1]);
+  return mi>=0?MONTH_NAMES[mi]+' '+m[2]:id;
+}
+function idToKey(id){
+  const m=id.match(/^([a-z]{3})(\d{4})$/);
+  if(!m)return null;
+  const mi=MONTHS.indexOf(m[1]);
+  return mi>=0?parseInt(m[2])*12+mi:null;
+}
+async function fetchList(id){
+  const r=await fetch('lists/'+id+'.json',{cache:'no-store'});
+  if(!r.ok)throw new Error('not found');
+  return r.json();
+}
+async function loadPublished(id,opts){
+  opts=opts||{};
+  try{
+    let data=await fetchList(id);
+    if(isLocked(data)){
+      const key=linkKey();
+      try{
+        if(!key)throw new Error('no key');
+        data=await decryptList(id,data,key);
+        _listKey=key;
+      }catch(e){
+        notice('This list is protected. Open it from the link in this month’s text or email.','error');
+        showView('upload');
+        return true;
+      }
+    }
+    if(!(data&&data.members&&data.members.length))throw new Error('empty');
+    _listId=id;
+    renderResults(data.members,data.svcDate||'',data.onDeck||[],data.unavail||[]);
+    showView('viewer');
+    if(opts.fallbackNote)notice(opts.fallbackNote);
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+async function loadBest(){
+  const now=new Date();
+  const currentId=MONTHS[now.getMonth()]+now.getFullYear();
+  // Manifest lets us fall back to the newest posted list
+  let ids=[];
+  try{
+    const mf=await(await fetch('lists/manifest.json',{cache:'no-store'})).json();
+    ids=(mf.lists||[]).filter(id=>idToKey(id)!==null);
+  }catch(e){/* manifest missing — fall through */}
+
+  if(await loadPublished(currentId))return;
+
+  const nowKey=now.getFullYear()*12+now.getMonth();
+  const sorted=ids.filter(id=>idToKey(id)<=nowKey&&id!==currentId).sort((a,b)=>idToKey(b)-idToKey(a));
+  for(const id of sorted){
+    if(await loadPublished(id,{fallbackNote:idToLabel(currentId)+"'s list hasn't been posted yet — showing "+idToLabel(id)+'.'}))return;
+  }
+  // Nothing published at all
+  notice('No list is posted yet. If you have this month’s spreadsheet, upload it below.');
+  showView('upload');
+}
+
+// ---------- Start ----------
+(function(){
+  const params=new URLSearchParams(location.search);
+  const listId=params.get('list');
+  if(listId){
+    const clean=listId.replace(/[^a-zA-Z0-9_-]/g,'');
+    loadPublished(clean).then(ok=>{
+      if(!ok){
+        notice('The list "'+idToLabel(clean)+'" could not be found. Showing the newest one instead.','error');
+        loadBest();
+      }
+    });
+    return;
+  }
+  if(location.hash&&location.hash.startsWith('#data=')){
+    // Old-style long links keep working
+    try{
+      const json=decodeURIComponent(escape(atob(location.hash.slice(6))));
+      const data=JSON.parse(json);
+      if(data&&data.members&&data.members.length){
+        renderResults(data.members,data.svcDate||'',data.onDeck||[],data.unavail||[]);
+        showView('viewer');
+        return;
+      }
+    }catch(e){console.warn('Could not load shared data',e)}
+  }
+  loadBest();
+})();
+</script>
+</body>
+</html>

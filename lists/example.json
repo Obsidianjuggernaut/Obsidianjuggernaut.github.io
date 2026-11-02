@@ -1,0 +1,19 @@
+{
+  "svcDate": "Sunday, December 1, 2025",
+  "members": [
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "fullAddress": "123 Main St, Columbus, OH 43224",
+      "phone": "(614) 555-1234",
+      "pocFirst": "Jane",
+      "pocLast": "Doe",
+      "pocPhone": "(614) 555-5678",
+      "pocEmail": "jane@example.com",
+      "deaconTeam": "Smith and Jones",
+      "notes": ""
+    }
+  ],
+  "onDeck": ["Williams and Brown"],
+  "unavail": ["Davis and Clark"]
+}
